@@ -121,7 +121,9 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
 
         # Conecta o botão à criação das camadas temporárias
         if hasattr(self, 'btn_vetor_temp'):
-            self.btn_vetor_temp.clicked.connect(self.criar_camadas_coordenadas)
+            self.btn_vetor_temp.clicked.connect(
+                lambda checked=False: self.criar_camadas_coordenadas()
+            )
 
         # Conecta o botão btn_add_ln_cor à função de adicionar linha
         if hasattr(self, 'btn_add_ln_cor'):
@@ -298,9 +300,10 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             return None
 
         texto_crs = sistema_coordenadas.authid() or 'EPSG:4674'
+        nome_base = self.nome_padrao_do_arquivo or 'ReconGeo'
         camada_pontos = QgsVectorLayer(
             f'Point?crs={texto_crs}',
-            'ReconGeo - Pontos',
+            f'{nome_base}_pto',
             'memory'
         )
         camada_pontos.dataProvider().addAttributes([
@@ -328,7 +331,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
 
         camada_poligono = QgsVectorLayer(
             f'Polygon?crs={texto_crs}',
-            'ReconGeo - Polígono',
+            f'{nome_base}_pol',
             'memory'
         )
 
@@ -380,7 +383,42 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         ])
         camada_poligono.dataProvider().addFeature(feicao_poligono)
 
-        QgsProject.instance().addMapLayers([camada_pontos, camada_poligono])
+        camada_linhas = QgsVectorLayer(
+            f'LineString?crs={texto_crs}',
+            f'{nome_base}_lna',
+            'memory'
+        )
+        camada_linhas.dataProvider().addAttributes([
+            QgsField('ordem', QVariant.Int),
+            QgsField('vertice_inicial', QVariant.String),
+            QgsField('vertice_final', QVariant.String),
+            QgsField('confrontante', QVariant.String),
+        ])
+        camada_linhas.updateFields()
+
+        feicoes_linhas = []
+        for indice, valores_iniciais in enumerate(atributos):
+            indice_final = (indice + 1) % len(atributos)
+            valores_finais = atributos[indice_final]
+            feicao_linha = QgsFeature(camada_linhas.fields())
+            feicao_linha.setGeometry(QgsGeometry.fromPolylineXY([
+                pontos[indice],
+                pontos[indice_final],
+            ]))
+            feicao_linha.setAttributes([
+                indice + 1,
+                valores_iniciais[0],
+                valores_finais[0],
+                valores_finais[3],
+            ])
+            feicoes_linhas.append(feicao_linha)
+        camada_linhas.dataProvider().addFeatures(feicoes_linhas)
+
+        QgsProject.instance().addMapLayers([
+            camada_pontos,
+            camada_poligono,
+            camada_linhas,
+        ])
         if self.iface is not None:
             canvas = self.iface.mapCanvas()
             canvas.setExtent(camada_poligono.extent())
@@ -394,7 +432,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                 + ', '.join(map(str, linhas_invalidas))
             )
 
-        return camada_pontos, camada_poligono
+        return camada_pontos, camada_poligono, camada_linhas
 
     def abrir_pdf(self):
         """Abre uma caixa de diálogo para seleção de um arquivo PDF.
