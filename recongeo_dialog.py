@@ -11,7 +11,7 @@ import os
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
 from qgis.PyQt.QtCore import QLocale, QUrl
-from qgis.PyQt.QtGui import QDesktopServices, QDoubleValidator
+from qgis.PyQt.QtGui import QDesktopServices, QDoubleValidator, QIntValidator, QValidator
 from qgis.PyQt.QtWidgets import QFileDialog, QMessageBox
 from qgis import gui
 
@@ -39,6 +39,29 @@ class FloatValidator(QDoubleValidator):
         return state, input_str, pos
 
 
+class IntegerValidator(QIntValidator):
+    """Validador numérico para números inteiros (int) que:
+    - Aceita apenas dígitos inteiros (sem separador decimal, letras ou símbolos).
+    - Valida o intervalo [bottom, top] em tempo real.
+    - Permite campo vazio durante a digitação/edição.
+    """
+
+    def __init__(self, bottom=0, top=999999, parent=None):
+        super(IntegerValidator, self).__init__(bottom, top, parent)
+
+    def validate(self, input_str, pos):
+        if not input_str:
+            return QValidator.Intermediate, input_str, pos
+        if not input_str.isdigit():
+            return QValidator.Invalid, input_str, pos
+        val = int(input_str)
+        if self.bottom() <= val <= self.top():
+            return QValidator.Acceptable, input_str, pos
+        if val < self.bottom():
+            return QValidator.Intermediate, input_str, pos
+        return QValidator.Invalid, input_str, pos
+
+
 class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         """Construtor da janela de diálogo.
@@ -56,11 +79,11 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if hasattr(self, 'btn_abrir_pdf'):
             self.btn_abrir_pdf.clicked.connect(self.abrir_pdf)
 
-        # Configura os validadores float nos QLineEdit especificados
+        # Configura os validadores float e int nos QLineEdit especificados
         self.configurar_validadores()
 
     def configurar_validadores(self):
-        """Aplica validação float com restrição de casas decimais aos QLineEdit."""
+        """Aplica validação float e int com restrições apropriadas aos QLineEdit."""
         # 'area': 4 casas decimais
         if hasattr(self, 'area'):
             self.area.setValidator(FloatValidator(decimals=4, parent=self))
@@ -73,12 +96,26 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         campos_6_decimais = [
             'coord_este_ini',
             'coord_norte_ini',
+            'confrontante_az',
             'este_cor',
             'norte_cor',
         ]
         for nome_campo in campos_6_decimais:
             if hasattr(self, nome_campo):
                 getattr(self, nome_campo).setValidator(FloatValidator(decimals=6, parent=self))
+
+        # 'graus': inteiro (0 a 360 graus para azimutes)
+        if hasattr(self, 'graus'):
+            self.graus.setValidator(IntegerValidator(bottom=0, top=360, parent=self))
+
+        # 'minutos': inteiro (0 a 59 minutos)
+        if hasattr(self, 'minutos'):
+            self.minutos.setValidator(IntegerValidator(bottom=0, top=59, parent=self))
+
+        # 'segundos': inteiro (0 a 59 segundos)
+        if hasattr(self, 'segundos'):
+            self.segundos.setValidator(IntegerValidator(bottom=0, top=59, parent=self))
+
 
 
     def abrir_pdf(self):
