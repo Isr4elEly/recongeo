@@ -8,10 +8,11 @@
 """
 
 import os
+import shutil
 from datetime import datetime
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
-from qgis.PyQt.QtCore import QLocale, QUrl
+from qgis.PyQt.QtCore import QDate, QLocale, QUrl, Qt
 from qgis.PyQt.QtGui import QDesktopServices, QDoubleValidator, QIntValidator, QValidator
 from qgis.PyQt.QtWidgets import QFileDialog, QMessageBox
 from qgis import gui
@@ -83,12 +84,20 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if hasattr(self, 'btn_abrir_pdf'):
             self.btn_abrir_pdf.clicked.connect(self.abrir_pdf)
 
-        # Conecta os botões btn_salvar e btn_dados_finais para validar e gerar o nome padrão
+        # Conecta o botão btn_salvar à função de salvar dados e btn_dados_finais ao nome padrão
         if hasattr(self, 'btn_salvar'):
-            self.btn_salvar.clicked.connect(self.formatar_nome_padrao_do_arquivo)
+            self.btn_salvar.clicked.connect(self.salvar_dados)
 
         if hasattr(self, 'btn_dados_finais'):
             self.btn_dados_finais.clicked.connect(self.formatar_nome_padrao_do_arquivo)
+
+        # Conecta o botão btn_abrir à função de importar dados
+        if hasattr(self, 'btn_abrir'):
+            self.btn_abrir.clicked.connect(self.importar_dados)
+
+        # Define a data atual do sistema como padrão para o campo data_analise
+        if hasattr(self, 'data_analise'):
+            self.data_analise.setDate(QDate.currentDate())
 
         # Configura os validadores float e int nos QLineEdit especificados
         self.configurar_validadores()
@@ -217,6 +226,242 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
 
         return nome_formatado
 
+    def salvar_copia_pdf(self, caminho_txt, nome_padrao=None):
+        """Salva uma cópia do arquivo PDF analisado no mesmo local de salvamento
+        do arquivo .txt, utilizando o mesmo nome padrão ({nome_padrao}.pdf).
+
+        Retorna a tupla (nome_pdf_original, nome_pdf_copiado, caminho_destino_pdf).
+        """
+        if not self.caminho_pdf or not os.path.isfile(self.caminho_pdf):
+            return ("", "", None)
+
+        nome_original = os.path.basename(self.caminho_pdf)
+
+        pasta_destino = os.path.dirname(caminho_txt)
+        if not nome_padrao:
+            nome_padrao = os.path.splitext(os.path.basename(caminho_txt))[0]
+
+        nome_copiado = f"{nome_padrao}.pdf"
+        caminho_destino = os.path.join(pasta_destino, nome_copiado)
+
+        try:
+            # Efetua a cópia caso o arquivo original e o destino sejam caminhos distintos
+            if os.path.abspath(self.caminho_pdf) != os.path.abspath(caminho_destino):
+                shutil.copy2(self.caminho_pdf, caminho_destino)
+            return (nome_original, nome_copiado, caminho_destino)
+        except Exception as e:
+            QMessageBox.warning(
+                self,
+                "Aviso ao Copiar PDF",
+                f"Ocorreu um erro ao tentar salvar uma cópia do PDF analisado:\n{str(e)}"
+            )
+            return (nome_original, "", None)
+
+    def salvar_dados(self):
+        """Coleta as informações dos campos do título, valida os campos obrigatórios,
+        abre o diálogo de seleção de local com o 'nome_padrao_do_arquivo',
+        salva uma cópia do PDF analisado no mesmo diretório
+        e salva as informações em formato .txt na seção [TITULO].
+        """
+        # Atualiza obrigatoriamente o campo data_analise para a data atual do sistema a cada clique em salvar
+        if hasattr(self, 'data_analise'):
+            self.data_analise.setDate(QDate.currentDate())
+
+        # Formata e valida o nome padrão do arquivo (garante gleba, num_titulo e num_lote preenchidos)
+        nome_padrao = self.formatar_nome_padrao_do_arquivo()
+        if not nome_padrao:
+            return
+
+        # Abre caixa de diálogo para seleção do local de salvamento
+        nome_sugerido = f"{nome_padrao}.txt"
+        caminho_arquivo, _ = QFileDialog.getSaveFileName(
+            self,
+            "Salvar Dados do Título",
+            nome_sugerido,
+            "Arquivos de Texto (*.txt);;Todos os Arquivos (*)"
+        )
+
+        if not caminho_arquivo:
+            return
+
+        # Garante a extensão .txt
+        if not caminho_arquivo.lower().endswith(".txt"):
+            caminho_arquivo += ".txt"
+
+        # Salva uma cópia do PDF analisado no mesmo diretório usando o mesmo nome padrão
+        pdf_orig, pdf_cop, caminho_pdf_copiado = self.salvar_copia_pdf(caminho_arquivo, nome_padrao)
+
+        # Coleta os valores de todos os campos listados
+        dados_titulo = [
+            ("processo", self.processo.text().strip() if hasattr(self, "processo") else ""),
+            ("gleba", self.gleba.text().strip() if hasattr(self, "gleba") else ""),
+            ("num_titulo", self.num_titulo.text().strip() if hasattr(self, "num_titulo") else ""),
+            ("num_lote", self.num_lote.text().strip() if hasattr(self, "num_lote") else ""),
+            ("nome_lote", self.nome_lote.text().strip() if hasattr(self, "nome_lote") else ""),
+            ("data_titulo", self.data_titulo.date().toString("dd/MM/yyyy") if hasattr(self, "data_titulo") else ""),
+            ("titulado", self.titulado.text().strip() if hasattr(self, "titulado") else ""),
+            ("area", self.area.text().strip() if hasattr(self, "area") else ""),
+            ("uf", self.uf.text().strip() if hasattr(self, "uf") else ""),
+            ("municipio", self.municipio.text().strip() if hasattr(self, "municipio") else ""),
+            ("data_analise", self.data_analise.date().toString("dd/MM/yyyy") if hasattr(self, "data_analise") else ""),
+            ("chkbox_sigef", str(self.chkbox_sigef.isChecked()) if hasattr(self, "chkbox_sigef") else "False"),
+            ("planilha_status", self.planilha_status.currentText() if hasattr(self, "planilha_status") else ""),
+            ("obs", self.obs.toPlainText().strip() if hasattr(self, "obs") else ""),
+            ("pdf_original", pdf_orig),
+            ("pdf_copiado", pdf_cop),
+        ]
+
+        # Salva o arquivo no formato .txt com a seção [TITULO]
+        try:
+            with open(caminho_arquivo, "w", encoding="utf-8") as f:
+                f.write("[TITULO]\n")
+                for chave, valor in dados_titulo:
+                    f.write(f"{chave} = {valor}\n")
+
+            mensagem_sucesso = f"Dados salvos com sucesso!\n\nArquivo TXT: {caminho_arquivo}"
+            if pdf_cop and caminho_pdf_copiado:
+                mensagem_sucesso += f"\nCópia do PDF: {caminho_pdf_copiado}"
+
+            QMessageBox.information(
+                self,
+                "Sucesso",
+                mensagem_sucesso
+            )
+        except Exception as e:
+            QMessageBox.critical(
+                self,
+                "Erro ao Salvar",
+                f"Ocorreu um erro ao tentar salvar o arquivo:\n{str(e)}"
+            )
+
+    def importar_dados(self):
+        """Abre uma caixa de diálogo para selecionar um arquivo .txt gerado pelo plugin,
+        lê as informações sob a seção [TITULO] e preenche os campos correspondentes do formulário.
+        """
+        caminho_arquivo, _ = QFileDialog.getOpenFileName(
+            self,
+            "Importar Dados do Título",
+            "",
+            "Arquivos de Texto (*.txt);;Todos os Arquivos (*)"
+        )
+
+        if not caminho_arquivo:
+            return
+
+        dados_titulo = {}
+        secao_atual = None
+        chave_atual = None
+
+        try:
+            with open(caminho_arquivo, "r", encoding="utf-8") as f:
+                for line in f:
+                    linha = line.rstrip("\r\n")
+                    linha_strip = linha.strip()
+
+                    # Identifica cabeçalho de seção (ex: [TITULO])
+                    if linha_strip.startswith("[") and linha_strip.endswith("]"):
+                        secao_atual = linha_strip[1:-1].strip().upper()
+                        chave_atual = None
+                        continue
+
+                    if secao_atual == "TITULO":
+                        if "=" in linha:
+                            chave, valor = linha.split("=", 1)
+                            chave_atual = chave.strip()
+                            dados_titulo[chave_atual] = valor.strip()
+                        elif chave_atual == "obs":
+                            # Continuação de observações com múltiplas linhas
+                            dados_titulo["obs"] += "\n" + linha
+        except Exception as e:
+            QMessageBox.critical(
+                self,
+                "Erro de Leitura",
+                f"Não foi possível ler o arquivo selecionado:\n{str(e)}"
+            )
+            return
+
+        if not dados_titulo:
+            QMessageBox.warning(
+                self,
+                "Aviso",
+                "O arquivo selecionado não contém a seção [TITULO] ou está vazio."
+            )
+            return
+
+        # Preenche campos de texto simples (QLineEdit)
+        campos_texto = [
+            "processo",
+            "gleba",
+            "num_titulo",
+            "num_lote",
+            "nome_lote",
+            "titulado",
+            "area",
+            "uf",
+            "municipio",
+        ]
+        for campo in campos_texto:
+            if campo in dados_titulo and hasattr(self, campo):
+                getattr(self, campo).setText(dados_titulo[campo])
+
+        # Preenche campos de data (QDateEdit)
+        for campo_data in ["data_titulo", "data_analise"]:
+            if campo_data in dados_titulo and hasattr(self, campo_data):
+                val_data = dados_titulo[campo_data]
+                if val_data:
+                    qdate = QDate.fromString(val_data, "dd/MM/yyyy")
+                    if not qdate.isValid():
+                        qdate = QDate.fromString(val_data, Qt.ISODate)
+                    if qdate.isValid():
+                        getattr(self, campo_data).setDate(qdate)
+
+        # Preenche o checkbox do SIGEF (QCheckBox)
+        if "chkbox_sigef" in dados_titulo and hasattr(self, "chkbox_sigef"):
+            val_sigef = dados_titulo["chkbox_sigef"].strip().lower()
+            self.chkbox_sigef.setChecked(val_sigef in ["true", "1", "sim", "yes"])
+
+        # Preenche o status da planilha (QComboBox)
+        if "planilha_status" in dados_titulo and hasattr(self, "planilha_status"):
+            val_status = dados_titulo["planilha_status"]
+            idx = self.planilha_status.findText(val_status)
+            if idx >= 0:
+                self.planilha_status.setCurrentIndex(idx)
+            else:
+                self.planilha_status.setCurrentText(val_status)
+
+        # Preenche observações (QTextEdit)
+        if "obs" in dados_titulo and hasattr(self, "obs"):
+            self.obs.setPlainText(dados_titulo["obs"])
+
+        # Atualiza a vinculação do PDF analisado se constar no arquivo importado
+        pdf_orig = dados_titulo.get("pdf_original", "")
+        pdf_cop = dados_titulo.get("pdf_copiado", "")
+        if pdf_cop:
+            pasta_txt = os.path.dirname(caminho_arquivo)
+            caminho_pdf_junto = os.path.join(pasta_txt, pdf_cop)
+            if os.path.isfile(caminho_pdf_junto):
+                self.caminho_pdf = caminho_pdf_junto
+                if hasattr(self, "lbl_arquivo"):
+                    self.lbl_arquivo.setText(pdf_cop)
+                    self.lbl_arquivo.setToolTip(caminho_pdf_junto)
+            elif pdf_orig and hasattr(self, "lbl_arquivo"):
+                self.lbl_arquivo.setText(pdf_orig)
+        elif pdf_orig and hasattr(self, "lbl_arquivo"):
+            self.lbl_arquivo.setText(pdf_orig)
+
+        # Atualiza o identificador padrão do arquivo com base no arquivo importado
+        nome_base = os.path.splitext(os.path.basename(caminho_arquivo))[0]
+        self.nome_padrao_do_arquivo = nome_base
+        if hasattr(self, "lbl_arquivo_padrao"):
+            self.lbl_arquivo_padrao.setText(nome_base)
+            self.lbl_arquivo_padrao.setToolTip(caminho_arquivo)
+
+        QMessageBox.information(
+            self,
+            "Sucesso",
+            f"Dados importados com sucesso!\n\nArquivo: {os.path.basename(caminho_arquivo)}"
+        )
+
     def get_valores(self):
         """Método auxiliar para coletar os dados do formulário."""
         return {
@@ -231,5 +476,6 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             "municipio": self.municipio.text().strip() if hasattr(self, 'municipio') else "",
             "caminho_pdf": self.caminho_pdf,
             "nome_padrao_do_arquivo": self.nome_padrao_do_arquivo,
+            "pdf_original": os.path.basename(self.caminho_pdf) if self.caminho_pdf else "",
         }
 
