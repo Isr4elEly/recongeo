@@ -8,6 +8,7 @@
 """
 
 import os
+from datetime import datetime
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
 from qgis.PyQt.QtCore import QLocale, QUrl
@@ -75,9 +76,19 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         # Variável para armazenar o caminho completo do PDF selecionado
         self.caminho_pdf = None
 
+        # Variável para armazenar o nome padrão formatado do arquivo
+        self.nome_padrao_do_arquivo = None
+
         # Conecta o botão btn_abrir_pdf à função que seleciona e abre o PDF
         if hasattr(self, 'btn_abrir_pdf'):
             self.btn_abrir_pdf.clicked.connect(self.abrir_pdf)
+
+        # Conecta os botões btn_salvar e btn_dados_finais para validar e gerar o nome padrão
+        if hasattr(self, 'btn_salvar'):
+            self.btn_salvar.clicked.connect(self.formatar_nome_padrao_do_arquivo)
+
+        if hasattr(self, 'btn_dados_finais'):
+            self.btn_dados_finais.clicked.connect(self.formatar_nome_padrao_do_arquivo)
 
         # Configura os validadores float e int nos QLineEdit especificados
         self.configurar_validadores()
@@ -92,11 +103,10 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if hasattr(self, 'distancia'):
             self.distancia.setValidator(FloatValidator(decimals=2, parent=self))
 
-        # 'coord_este_ini', 'coord_norte_ini', 'confrontante_az', 'este_cor', 'norte_cor': 6 casas decimais
+        # 'coord_este_ini', 'coord_norte_ini', 'este_cor', 'norte_cor': 6 casas decimais
         campos_6_decimais = [
             'coord_este_ini',
             'coord_norte_ini',
-            'confrontante_az',
             'este_cor',
             'norte_cor',
         ]
@@ -154,16 +164,72 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                 f"Não foi possível abrir o arquivo no visualizador do sistema:\n{caminho_arquivo}"
             )
 
+    def formatar_nome_padrao_do_arquivo(self, *args, **kwargs):
+        """Formata o 'nome_padrao_do_arquivo' utilizando os campos obrigatórios:
+        'gleba', 'num_titulo', 'num_lote' seguidos do datetime da geração (separados por '-').
+
+        Caso algum dos campos esteja vazio, exibe mensagem de erro e retorna None.
+        Atualiza o QLabel 'lbl_arquivo_padrao' com o nome formatado.
+        """
+        gleba = self.gleba.text().strip() if hasattr(self, 'gleba') else ""
+        num_titulo = self.num_titulo.text().strip() if hasattr(self, 'num_titulo') else ""
+        num_lote = self.num_lote.text().strip() if hasattr(self, 'num_lote') else ""
+
+        # Verificação dos campos obrigatórios
+        campos_vazios = []
+        if not gleba:
+            campos_vazios.append("Nome da Gleba ('gleba')")
+        if not num_titulo:
+            campos_vazios.append("Nº do Título ('num_titulo')")
+        if not num_lote:
+            campos_vazios.append("Nº do Lote ('num_lote')")
+
+        if campos_vazios:
+            lista_campos = "\n".join(f"• {campo}" for campo in campos_vazios)
+            mensagem_erro = (
+                f"Não é possível continuar. Os seguintes campos são obrigatórios e não podem estar vazios:\n\n"
+                f"{lista_campos}\n\n"
+                f"Por favor, preencha todos os campos obrigatórios antes de prosseguir."
+            )
+            QMessageBox.critical(self, "Campos Obrigatórios Vazios", mensagem_erro)
+
+            # Define o foco no primeiro campo com pendência
+            if not gleba and hasattr(self, 'gleba'):
+                self.gleba.setFocus()
+            elif not num_titulo and hasattr(self, 'num_titulo'):
+                self.num_titulo.setFocus()
+            elif not num_lote and hasattr(self, 'num_lote'):
+                self.num_lote.setFocus()
+
+            return None
+
+        # Formata o timestamp com a data e hora atuais da geração
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        nome_formatado = f"{gleba}-{num_titulo}-{num_lote}-{timestamp}"
+
+        # Armazena o resultado na instância
+        self.nome_padrao_do_arquivo = nome_formatado
+
+        # Atualiza o QLabel 'lbl_arquivo_padrao' na interface
+        if hasattr(self, 'lbl_arquivo_padrao'):
+            self.lbl_arquivo_padrao.setText(nome_formatado)
+            self.lbl_arquivo_padrao.setToolTip(nome_formatado)
+
+        return nome_formatado
+
     def get_valores(self):
         """Método auxiliar para coletar os dados do formulário."""
         return {
             "processo": self.processo.text().strip() if hasattr(self, 'processo') else "",
             "gleba": self.gleba.text().strip() if hasattr(self, 'gleba') else "",
+            "num_titulo": self.num_titulo.text().strip() if hasattr(self, 'num_titulo') else "",
+            "num_lote": self.num_lote.text().strip() if hasattr(self, 'num_lote') else "",
             "nome_lote": self.nome_lote.text().strip() if hasattr(self, 'nome_lote') else "",
             "titulado": self.titulado.text().strip() if hasattr(self, 'titulado') else "",
             "area": self.area.text().strip() if hasattr(self, 'area') else "",
             "uf": self.uf.text().strip() if hasattr(self, 'uf') else "",
             "municipio": self.municipio.text().strip() if hasattr(self, 'municipio') else "",
             "caminho_pdf": self.caminho_pdf,
+            "nome_padrao_do_arquivo": self.nome_padrao_do_arquivo,
         }
 
