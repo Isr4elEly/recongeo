@@ -46,16 +46,16 @@
 - area
 - uf
 - municipio
-- distancia
 - coord_este_ini
 - coord_norte_ini
 - vertice_ini
-- confrontante_az
 - graus
 - minutos
 - segundos
-- num_lote_az
+- distancia
 - vertice_az
+- confrontante_az
+- num_lote_az
 - vertice_cor
 - este_cor
 - norte_cor
@@ -89,4 +89,30 @@
 - tbl_azimute
 - tbl_coordenada
 
+crie as funções:
 
+"""
+def calc_azimute_decimal(self, graus, minutos, segundos):
+    azimute_decimal = graus + (minutos / 60.0) + (segundos / 3600.0)
+    return azimute_decimal
+
+def calc_delta_este(self, azimute_decimal, distancia):
+    delta_este = math.sin(math.radians(azimute_decimal)) * distancia
+    return delta_este
+    
+def calc_delta_norte(self, azimute_decimal, distancia):
+    delta_norte = math.cos(math.radians(azimute_decimal)) * distancia
+    return delta_norte
+
+def calcula_coodenada_seguinte(este_ini, norte_inicial, delta_este, delta_norte):
+    este_pos = este_ini + delta_este
+    norte_pos = norte_ini + delta_norte
+    return este_pos, norte_pos
+"""
+o método disparado pelo "btn_add_ln_az" deve pegar as informações dos campos [graus, minutos, segundos, distancia, vertice_az, confrontante_az, num_lote_az] e calcular os campos azimute_decimal, delta_este, delta_norte utilizando as funções acima descritas e calcular as coordenadas com base na linha anterior da tabela e a função "calcula_coodenada_seguinte".
+
+inclua na função do btn_add_ln_az a limpesa dos campos [graus, minutos, segundos, distancia, vertice_az, confrontante_az, num_lote_az] após o clique e mova o cursor para o campo graus para uma nova inclusão.
+
+modifique o botão "btn_remove_ln_az" para iniciar desabilitado, ficando habilitado quando uma linha da "tbl_azimute" for selecionada, voltando a ficar desabilitado se a seleção for removida. Ao ser clicado, o "btn_remove_ln_az" deve apagar a linha selecionada e recalcular a linhas abaixo conforme descrito para os cálculos do "btn_add_ln_az" sem haver adição de nova linha na tabela.
+
+seguindo a mesma lógica, o "btn_az_recal_tabela" deve ficar desabilitado, sendo habilitado com a seleção de uma linha da tabela, e aplicar o recalculo a linhas abaixo conforme descrito para os cálculos do "btn_add_ln_az" sem haver adição de nova linha na tabela.

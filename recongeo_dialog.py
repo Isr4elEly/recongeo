@@ -9,6 +9,7 @@
 
 import os
 import json
+import math
 import shutil
 from datetime import datetime
 from qgis.PyQt import uic
@@ -151,6 +152,11 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if hasattr(self, 'btn_add_ln_cor'):
             self.btn_add_ln_cor.clicked.connect(self.adicionar_linha_coordenada)
 
+        if hasattr(self, 'btn_add_ln_az'):
+            self.btn_add_ln_az.clicked.connect(
+                lambda checked=False: self.adicionar_linha_azimute()
+            )
+
         # Define a data atual do sistema como padrão para o campo data_analise
         if hasattr(self, 'data_analise'):
             self.data_analise.setDate(QDate.currentDate())
@@ -265,6 +271,130 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if hasattr(self, 'btn_remove_vert_ini_az'):
             self.btn_remove_vert_ini_az.setEnabled(True)
         self.configurar_campos_azimute(True)
+
+    def calc_azimute_decimal(self, graus, minutos, segundos):
+        """Converte graus, minutos e segundos para graus decimais."""
+        return graus + (minutos / 60.0) + (segundos / 3600.0)
+
+    def calc_delta_este(self, azimute_decimal, distancia):
+        """Calcula a variação Este a partir do azimute e distância."""
+        return math.sin(math.radians(azimute_decimal)) * distancia
+
+    def calc_delta_norte(self, azimute_decimal, distancia):
+        """Calcula a variação Norte a partir do azimute e distância."""
+        return math.cos(math.radians(azimute_decimal)) * distancia
+
+    def calcula_coodenada_seguinte(
+            self, este_ini, norte_ini, delta_este, delta_norte):
+        """Calcula a coordenada seguinte a partir da coordenada anterior."""
+        este_pos = este_ini + delta_este
+        norte_pos = norte_ini + delta_norte
+        return este_pos, norte_pos
+
+    def adicionar_linha_azimute(self):
+        """Calcula e adiciona a próxima linha na tabela de azimute."""
+        if not hasattr(self, 'tbl_azimute'):
+            return
+
+        campos = [
+            'graus',
+            'minutos',
+            'segundos',
+            'distancia',
+            'vertice_az',
+            'confrontante_az',
+            'num_lote_az',
+        ]
+        valores = {}
+        for nome_campo in campos:
+            if not hasattr(self, nome_campo):
+                return
+            valores[nome_campo] = getattr(self, nome_campo).text().strip()
+
+        if not all(valores.values()):
+            QMessageBox.warning(
+                self,
+                'Dados incompletos',
+                'Preencha todos os campos do novo segmento de azimute.'
+            )
+            return
+
+        try:
+            graus = float(valores['graus'].replace(',', '.'))
+            minutos = float(valores['minutos'].replace(',', '.'))
+            segundos = float(valores['segundos'].replace(',', '.'))
+            distancia = float(valores['distancia'].replace(',', '.'))
+        except ValueError:
+            QMessageBox.warning(
+                self,
+                'Valores inválidos',
+                'Graus, minutos, segundos e distância devem ser numéricos.'
+            )
+            return
+
+        tabela = self.tbl_azimute
+        if tabela.rowCount() == 0:
+            QMessageBox.warning(
+                self,
+                'Vértice inicial ausente',
+                'Adicione o vértice inicial antes de inserir um segmento.'
+            )
+            return
+
+        linha_anterior = tabela.rowCount() - 1
+        item_este = tabela.item(linha_anterior, 1)
+        item_norte = tabela.item(linha_anterior, 2)
+        try:
+            este_ini = float(item_este.text().replace(',', '.'))
+            norte_ini = float(item_norte.text().replace(',', '.'))
+        except (AttributeError, ValueError):
+            QMessageBox.warning(
+                self,
+                'Coordenada anterior inválida',
+                'A linha anterior não possui coordenadas Este e Norte válidas.'
+            )
+            return
+
+        azimute_decimal = self.calc_azimute_decimal(
+            graus, minutos, segundos
+        )
+        delta_este = self.calc_delta_este(azimute_decimal, distancia)
+        delta_norte = self.calc_delta_norte(azimute_decimal, distancia)
+        este_pos, norte_pos = self.calcula_coodenada_seguinte(
+            este_ini,
+            norte_ini,
+            delta_este,
+            delta_norte,
+        )
+
+        from qgis.PyQt.QtWidgets import QTableWidgetItem
+
+        nova_linha = tabela.rowCount()
+        tabela.insertRow(nova_linha)
+        valores_linha = [
+            valores['vertice_az'],
+            f'{este_pos:.6f}',
+            f'{norte_pos:.6f}',
+            valores['graus'],
+            valores['minutos'],
+            valores['segundos'],
+            valores['distancia'],
+            f'{azimute_decimal:.6f}',
+            f'{delta_este:.6f}',
+            f'{delta_norte:.6f}',
+            valores['confrontante_az'],
+            valores['num_lote_az'],
+        ]
+        for coluna, valor in enumerate(valores_linha):
+            tabela.setItem(
+                nova_linha,
+                coluna,
+                QTableWidgetItem(valor),
+            )
+
+        for nome_campo in campos:
+            getattr(self, nome_campo).clear()
+        self.graus.setFocus()
 
     def remover_vertice_inicial_az(self):
         """Remove a primeira linha da tabela e libera uma nova inserção."""

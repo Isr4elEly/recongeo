@@ -467,7 +467,7 @@
       <rect>
        <x>10</x>
        <y>130</y>
-       <width>261</width>
+       <width>231</width>
        <height>251</height>
       </rect>
      </property>
@@ -482,7 +482,7 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>241</width>
+        <width>211</width>
         <height>28</height>
        </rect>
       </property>
@@ -501,7 +501,7 @@
        <rect>
         <x>10</x>
         <y>40</y>
-        <width>241</width>
+        <width>211</width>
         <height>28</height>
        </rect>
       </property>
@@ -517,7 +517,7 @@
        <rect>
         <x>10</x>
         <y>70</y>
-        <width>241</width>
+        <width>211</width>
         <height>28</height>
        </rect>
       </property>
@@ -533,7 +533,7 @@
        <rect>
         <x>10</x>
         <y>100</y>
-        <width>241</width>
+        <width>211</width>
         <height>28</height>
        </rect>
       </property>
@@ -549,7 +549,7 @@
        <rect>
         <x>10</x>
         <y>130</y>
-        <width>241</width>
+        <width>211</width>
         <height>28</height>
        </rect>
       </property>
@@ -565,7 +565,7 @@
        <rect>
         <x>10</x>
         <y>160</y>
-        <width>241</width>
+        <width>211</width>
         <height>28</height>
        </rect>
       </property>
@@ -581,7 +581,7 @@
        <rect>
         <x>10</x>
         <y>190</y>
-        <width>241</width>
+        <width>211</width>
         <height>28</height>
        </rect>
       </property>
@@ -620,7 +620,7 @@
      <widget class="QPushButton" name="btn_remove_ln_az">
       <property name="geometry">
        <rect>
-        <x>160</x>
+        <x>130</x>
         <y>220</y>
         <width>93</width>
         <height>28</height>
@@ -643,45 +643,13 @@
       </property>
      </widget>
     </widget>
-    <widget class="QPushButton" name="btn_az_up_ln">
-     <property name="geometry">
-      <rect>
-       <x>280</x>
-       <y>170</y>
-       <width>51</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 190, 111);</string>
-     </property>
-     <property name="text">
-      <string>up</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btn_az_down_ln">
-     <property name="geometry">
-      <rect>
-       <x>280</x>
-       <y>200</y>
-       <width>51</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 190, 111);</string>
-     </property>
-     <property name="text">
-      <string>down</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="btn_az_recal_tabela">
      <property name="geometry">
       <rect>
-       <x>280</x>
-       <y>230</y>
-       <width>51</width>
-       <height>28</height>
+       <x>250</x>
+       <y>207</y>
+       <width>81</width>
+       <height>51</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -1014,8 +982,6 @@
   <tabstop>num_lote_az</tabstop>
   <tabstop>btn_add_ln_az</tabstop>
   <tabstop>btn_remove_ln_az</tabstop>
-  <tabstop>btn_az_up_ln</tabstop>
-  <tabstop>btn_az_down_ln</tabstop>
   <tabstop>btn_az_recal_tabela</tabstop>
   <tabstop>tbl_coordenanda</tabstop>
   <tabstop>mQgsProjectionSelectionWidget</tabstop>
