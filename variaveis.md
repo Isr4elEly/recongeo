@@ -11,10 +11,12 @@
 - btn_az_down_ln
 - btn_az_recal_tabela
 - btn_az_up_ln
+- btn_add_vert_ini_az
 - btn_add_ln_az
 - btn_remove_ln_az
 - btn_add_ln_cor
 - btn_remove_ln_cor
+- btn_limp_form
 
 ## label (QLabel)
 

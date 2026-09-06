@@ -119,6 +119,10 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if hasattr(self, 'btn_abrir'):
             self.btn_abrir.clicked.connect(self.importar_dados)
 
+        # Conecta o botão à limpeza completa do formulário
+        if hasattr(self, 'btn_limp_form'):
+            self.btn_limp_form.clicked.connect(self.limpar_formulario)
+
         # Conecta o botão à criação das camadas temporárias
         if hasattr(self, 'btn_vetor_temp'):
             self.btn_vetor_temp.clicked.connect(
@@ -172,6 +176,58 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
 
         tabela.removeRow(linha)
         self.atualizar_estado_btn_remove_ln_cor()
+
+    def limpar_formulario(self):
+        """Confirma e limpa campos, tabelas e arquivos selecionados."""
+        resposta = QMessageBox.question(
+            self,
+            'Confirmar limpeza',
+            'Deseja realmente limpar todos os campos e tabelas do formulário?',
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No,
+        )
+        if resposta != QMessageBox.Yes:
+            return
+
+        for campo in self.findChildren(QtWidgets.QLineEdit):
+            campo.clear()
+
+        for campo in self.findChildren(QtWidgets.QTextEdit):
+            campo.clear()
+
+        for campo in self.findChildren(QtWidgets.QPlainTextEdit):
+            campo.clear()
+
+        for campo in self.findChildren(QtWidgets.QComboBox):
+            campo.setCurrentIndex(-1)
+
+        for campo in self.findChildren(QtWidgets.QCheckBox):
+            campo.setChecked(False)
+
+        for campo in self.findChildren(QtWidgets.QDateEdit):
+            campo.lineEdit().clear()
+
+        for tabela in self.findChildren(QtWidgets.QTableWidget):
+            tabela.clearContents()
+            tabela.setRowCount(0)
+
+        if hasattr(self, 'mQgsProjectionSelectionWidget'):
+            self.mQgsProjectionSelectionWidget.setCrs(
+                QgsCoordinateReferenceSystem('EPSG:4674')
+            )
+
+        self.caminho_pdf = None
+        self.nome_padrao_do_arquivo = None
+
+        for nome_label in ['lbl_arquivo', 'lbl_arquivo_padrao']:
+            if hasattr(self, nome_label):
+                label = getattr(self, nome_label)
+                label.clear()
+                label.setToolTip('')
+
+        self.atualizar_estado_btn_remove_ln_cor()
+        if hasattr(self, 'btn_remove_ln_az'):
+            self.btn_remove_ln_az.setEnabled(False)
 
     def configurar_validadores(self):
         """Aplica validação float e int com restrições apropriadas aos QLineEdit."""
@@ -672,6 +728,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         dados_src = {}
         dados_coordenadas = []
         tem_secao_coordenadas = False
+        aba_importada = None
         secao_atual = None
         chave_atual = None
 
@@ -686,6 +743,9 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                         secao_atual = linha_strip[1:-1].strip().upper()
                         if secao_atual == "TABELA_COORDENADAS":
                             tem_secao_coordenadas = True
+                            aba_importada = "coordenada"
+                        elif secao_atual == "AZIMUTE":
+                            aba_importada = "azimute"
                         chave_atual = None
                         continue
 
@@ -796,6 +856,12 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             crs = QgsCoordinateReferenceSystem(crs_authid)
             if crs.isValid():
                 self.mQgsProjectionSelectionWidget.setCrs(crs)
+
+        # Seleciona a aba correspondente à seção importada
+        if aba_importada and hasattr(self, "tabWidget"):
+            nome_aba = getattr(self, aba_importada, None)
+            if nome_aba is not None:
+                self.tabWidget.setCurrentWidget(nome_aba)
 
         # Atualiza a vinculação do PDF analisado se constar no arquivo importado
         pdf_orig = dados_titulo.get("pdf_original", "")

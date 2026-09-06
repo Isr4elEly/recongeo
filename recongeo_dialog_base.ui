@@ -253,6 +253,9 @@
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Abre o arquivo PDF com as informações do processo de titulação.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(143, 240, 164);</string>
+      </property>
       <property name="text">
        <string>Abrir PDF</string>
       </property>
@@ -262,6 +265,9 @@
      <widget class="QPushButton" name="btn_salvar">
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Salva os dados digitados em arquivo do plugin.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(143, 240, 164);</string>
       </property>
       <property name="text">
        <string>Salvar Dados</string>
@@ -273,6 +279,9 @@
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Importa um arquivo txt gerado pelo plugin.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(143, 240, 164);</string>
+      </property>
       <property name="text">
        <string>Importar Dados</string>
       </property>
@@ -282,6 +291,9 @@
      <widget class="QPushButton" name="btn_vetor_temp">
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gera vetores temporários no QGIS para a conferência do memorial.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(246, 211, 45);</string>
       </property>
       <property name="text">
        <string>Vetores Temporários</string>
@@ -293,8 +305,21 @@
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gera os arquivos finais da reconstituição.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(26, 95, 180);</string>
+      </property>
       <property name="text">
        <string>Arquivos Finais</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btn_limp_form">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(224, 27, 36);</string>
+      </property>
+      <property name="text">
+       <string>Limpar Formulário</string>
       </property>
      </widget>
     </item>
@@ -391,7 +416,7 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>261</width>
+       <width>231</width>
        <height>28</height>
       </rect>
      </property>
@@ -410,7 +435,7 @@
       <rect>
        <x>10</x>
        <y>40</y>
-       <width>261</width>
+       <width>231</width>
        <height>28</height>
       </rect>
      </property>
@@ -426,7 +451,7 @@
       <rect>
        <x>10</x>
        <y>70</y>
-       <width>261</width>
+       <width>231</width>
        <height>28</height>
       </rect>
      </property>
@@ -622,10 +647,13 @@
      <property name="geometry">
       <rect>
        <x>280</x>
-       <y>80</y>
+       <y>170</y>
        <width>51</width>
        <height>28</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 190, 111);</string>
      </property>
      <property name="text">
       <string>up</string>
@@ -635,10 +663,13 @@
      <property name="geometry">
       <rect>
        <x>280</x>
-       <y>110</y>
+       <y>200</y>
        <width>51</width>
        <height>28</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 190, 111);</string>
      </property>
      <property name="text">
       <string>down</string>
@@ -648,13 +679,33 @@
      <property name="geometry">
       <rect>
        <x>280</x>
-       <y>140</y>
+       <y>230</y>
        <width>51</width>
        <height>28</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 190, 111);</string>
+     </property>
      <property name="text">
       <string>recalc</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_add_vert_ini_az">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>10</y>
+       <width>81</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(205, 171, 143);</string>
+     </property>
+     <property name="text">
+      <string>Adicionar 
+ Partida</string>
      </property>
     </widget>
    </widget>
