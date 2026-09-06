@@ -1,0 +1,963 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ReconGeoDialogBase</class>
+ <widget class="QDialog" name="ReconGeoDialogBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1331</width>
+    <height>816</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ReconGeo - Janela Principal</string>
+  </property>
+  <widget class="QFrame" name="frm_info">
+   <property name="geometry">
+    <rect>
+     <x>510</x>
+     <y>10</y>
+     <width>801</width>
+     <height>391</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QFrame" name="frame_4">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>10</y>
+      <width>361</width>
+      <height>184</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="lbl_nome_lote">
+       <property name="text">
+        <string>Nome do Lote</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="nome_lote"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lbl_titulado">
+       <property name="text">
+        <string>Titulado</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="titulado"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="lbl_area">
+       <property name="text">
+        <string>Àrea (ha)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="area"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="lbl_uf">
+       <property name="text">
+        <string>UF</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="uf"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="lbl_municipio">
+       <property name="text">
+        <string>Município</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="municipio"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QFrame" name="frame_5">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>411</width>
+      <height>185</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <layout class="QFormLayout" name="formLayout_2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="lbl_processo">
+       <property name="text">
+        <string>Nº do Processo</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="processo"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lbl_gleba">
+       <property name="text">
+        <string>Nome da Gleba</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="gleba"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="lbl_num_titulo">
+       <property name="text">
+        <string>Nº do Título</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="num_titulo"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="lbl_num_lote">
+       <property name="text">
+        <string>Nº do Lote</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="num_lote"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="lbl_data_titulo">
+       <property name="text">
+        <string>Data do Título</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QDateEdit" name="data_titulo"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QFrame" name="frame_6">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>196</y>
+      <width>781</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="lbl_data_analise">
+       <property name="text">
+        <string>Data da Análise</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QDateEdit" name="data_analise"/>
+     </item>
+     <item row="0" column="2">
+      <widget class="QCheckBox" name="chkbox_sigef">
+       <property name="text">
+        <string>Cadastro SIGEF</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QComboBox" name="planilha_status">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Informe se o memorial descritivo pode gerar uma planilha &amp;quot;&lt;span style=&quot; font-weight:600;&quot;&gt;conforme&lt;/span&gt;&amp;quot;, &amp;quot;&lt;span style=&quot; font-weight:600;&quot;&gt;incompleta&lt;/span&gt;&amp;quot; ou não houve informações suficientes para gerar a planilha de coordenadas &amp;quot;&lt;span style=&quot; font-weight:600;&quot;&gt;não conforme&lt;/span&gt;&amp;quot;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Planilha Conforme</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Planilha Incompleta</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Planilha não conforme</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="3">
+      <widget class="QTextEdit" name="obs"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lbl_obs">
+       <property name="text">
+        <string>Observações</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>191</width>
+     <height>251</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="btn_abrir_pdf">
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Abre o arquivo PDF com as informações do processo de titulação.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>Abrir PDF</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btn_salvar">
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Salva os dados digitados em arquivo do plugin.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>Salvar Dados</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btn_abrir">
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Importa um arquivo txt gerado pelo plugin.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>Importar Dados</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btn_vetor_temp">
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gera vetores temporários no QGIS para a conferência do memorial.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>Vetores Temporários</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btn_dados_finais">
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gera os arquivos finais da reconstituição.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>Arquivos Finais</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>390</y>
+     <width>1301</width>
+     <height>421</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="azimute">
+    <attribute name="title">
+     <string>Azimute e Distância</string>
+    </attribute>
+    <widget class="QTableWidget" name="tbl_azimute">
+     <property name="geometry">
+      <rect>
+       <x>335</x>
+       <y>10</y>
+       <width>951</width>
+       <height>341</height>
+      </rect>
+     </property>
+     <column>
+      <property name="text">
+       <string>Vértice</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Este</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Norte</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Graus</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Minutos</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Segundos</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Distância</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Azimute Decimal</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Delta Este</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Delta Norte</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Confrontante</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Lote Vizinho</string>
+      </property>
+     </column>
+    </widget>
+    <widget class="QLineEdit" name="vertice_ini">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>261</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Nome do vértice de partida&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(205, 171, 143);</string>
+     </property>
+     <property name="placeholderText">
+      <string>Vértice de Partida</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="coord_este_ini">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>261</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(205, 171, 143);</string>
+     </property>
+     <property name="placeholderText">
+      <string>Coordenada Este</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="coord_norte_ini">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>261</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(205, 171, 143);</string>
+     </property>
+     <property name="placeholderText">
+      <string>Coordenada Norte</string>
+     </property>
+    </widget>
+    <widget class="QFrame" name="frame_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>261</width>
+       <height>251</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLineEdit" name="graus">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>241</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Graus</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="minutos">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>241</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Minutos</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="segundos">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>241</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Segundos</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="distancia">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>241</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Distância</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="vertice_az">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>241</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Vértice</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="confrontante_az">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>160</y>
+        <width>241</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Confrontante</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="num_lote_az">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>190</y>
+        <width>241</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Número do lote</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_add_ln_az">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>220</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adiciona os dados à tabela&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(153, 193, 241);</string>
+      </property>
+      <property name="text">
+       <string>+</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_remove_ln_az">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>220</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Remove a linha selecionada da tabela&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(246, 97, 81);</string>
+      </property>
+      <property name="text">
+       <string>-</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QPushButton" name="btn_az_up_ln">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>80</y>
+       <width>51</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>up</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_az_down_ln">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>110</y>
+       <width>51</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>down</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_az_recal_tabela">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>140</y>
+       <width>51</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>recalc</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="coordenada">
+    <attribute name="title">
+     <string>Coordenadas</string>
+    </attribute>
+    <widget class="QTableWidget" name="tbl_coordenanda">
+     <property name="geometry">
+      <rect>
+       <x>295</x>
+       <y>10</y>
+       <width>991</width>
+       <height>331</height>
+      </rect>
+     </property>
+     <column>
+      <property name="text">
+       <string>Vértice</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Este</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Norte</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Confrontante</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Lote Vizinho</string>
+      </property>
+     </column>
+    </widget>
+    <widget class="QFrame" name="frame_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>271</width>
+       <height>331</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLineEdit" name="confrontante_cor">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>241</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Confrontante</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="norte_cor">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>241</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Coordenada Norte</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_remove_ln_cor">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>170</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Remove a linha selecionada da tabela&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(246, 97, 81);</string>
+      </property>
+      <property name="text">
+       <string>-</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="este_cor">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>241</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Coordenada Este</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="vertice_cor">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>241</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Vértice</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_add_ln_cor">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>170</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adiciona os dados à tabela&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(153, 193, 241);</string>
+      </property>
+      <property name="text">
+       <string>+</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lote_vizinho_cor">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>241</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Lote Vizinho</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QgsProjectionSelectionWidget" name="mQgsProjectionSelectionWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>350</y>
+     <width>461</width>
+     <height>28</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl_arquivo">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>280</y>
+     <width>481</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Arquivo analisado</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl_arquivo_padrao">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>310</y>
+     <width>481</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Nome padrão</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl_logotipo">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>10</y>
+     <width>291</width>
+     <height>271</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>a7904fab-bea6-479f-a5d4-8832a9055c73.jpeg</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsProjectionSelectionWidget</class>
+   <extends>QWidget</extends>
+   <header>qgsprojectionselectionwidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>btn_abrir_pdf</tabstop>
+  <tabstop>processo</tabstop>
+  <tabstop>gleba</tabstop>
+  <tabstop>num_titulo</tabstop>
+  <tabstop>num_lote</tabstop>
+  <tabstop>data_titulo</tabstop>
+  <tabstop>nome_lote</tabstop>
+  <tabstop>titulado</tabstop>
+  <tabstop>area</tabstop>
+  <tabstop>uf</tabstop>
+  <tabstop>municipio</tabstop>
+  <tabstop>data_analise</tabstop>
+  <tabstop>chkbox_sigef</tabstop>
+  <tabstop>planilha_status</tabstop>
+  <tabstop>obs</tabstop>
+  <tabstop>vertice_cor</tabstop>
+  <tabstop>este_cor</tabstop>
+  <tabstop>norte_cor</tabstop>
+  <tabstop>confrontante_cor</tabstop>
+  <tabstop>lote_vizinho_cor</tabstop>
+  <tabstop>btn_salvar</tabstop>
+  <tabstop>tbl_azimute</tabstop>
+  <tabstop>vertice_ini</tabstop>
+  <tabstop>coord_este_ini</tabstop>
+  <tabstop>coord_norte_ini</tabstop>
+  <tabstop>graus</tabstop>
+  <tabstop>minutos</tabstop>
+  <tabstop>segundos</tabstop>
+  <tabstop>distancia</tabstop>
+  <tabstop>vertice_az</tabstop>
+  <tabstop>confrontante_az</tabstop>
+  <tabstop>num_lote_az</tabstop>
+  <tabstop>btn_add_ln_az</tabstop>
+  <tabstop>btn_remove_ln_az</tabstop>
+  <tabstop>btn_az_up_ln</tabstop>
+  <tabstop>btn_az_down_ln</tabstop>
+  <tabstop>btn_az_recal_tabela</tabstop>
+  <tabstop>tbl_coordenanda</tabstop>
+  <tabstop>mQgsProjectionSelectionWidget</tabstop>
+  <tabstop>btn_dados_finais</tabstop>
+  <tabstop>btn_remove_ln_cor</tabstop>
+  <tabstop>btn_vetor_temp</tabstop>
+  <tabstop>btn_abrir</tabstop>
+  <tabstop>btn_add_ln_cor</tabstop>
+  <tabstop>tabWidget</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

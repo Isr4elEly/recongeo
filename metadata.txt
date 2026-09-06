@@ -1,0 +1,13 @@
+[general]
+name=ReconGeo
+qgisMinimumVersion=3.0
+description=Plugin ReconGeo para QGIS com interface Qt5 editável via Qt Designer
+version=0.1
+author=Desenvolvedor
+email=contato@exemplo.com
+about=Plugin desenvolvido para QGIS 3 com interface PyQt5 editável diretamente no Qt Designer sem necessidade de compilação intermediária.
+tracker=
+repository=
+category=Plugins
+icon=icon.png
+experimental=True
