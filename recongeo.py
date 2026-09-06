@@ -89,25 +89,9 @@ class ReconGeoPlugin:
         """Executa a lógica principal e abre a janela de diálogo."""
         # Instancia o diálogo. Como o recongeo_dialog.py usa uic.loadUiType,
         # cada nova instância recarregará eventuais alterações feitas no Qt Designer.
-        self.dlg = ReconGeoDialog(self.iface.mainWindow())
+        self.dlg = ReconGeoDialog(self.iface.mainWindow(), self.iface)
 
-        # Exibe a janela de forma modal
-        result = self.dlg.exec_()
-
-        # Se o usuário clicou em OK / Aceitar
-        if result:
-            dados = self.dlg.get_valores()
-            lote = dados.get("nome_lote") or "N/A"
-            processo = dados.get("processo") or "N/A"
-            mensagem = (
-                f"ReconGeo executado com sucesso!\n"
-                f"Lote: {lote}\n"
-                f"Processo: {processo}"
-            )
-            self.iface.messageBar().pushMessage(
-                "ReconGeo",
-                mensagem,
-                level=Qgis.Info,
-                duration=5,
-            )
-            QgsMessageLog.logMessage(mensagem, "ReconGeo", level=Qgis.Info)
+        # Exibe a janela como uma janela independente e não modal
+        self.dlg.show()
+        self.dlg.raise_()
+        self.dlg.activateWindow()

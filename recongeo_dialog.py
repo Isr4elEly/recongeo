@@ -8,14 +8,24 @@
 """
 
 import os
+import json
 import shutil
 from datetime import datetime
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
-from qgis.PyQt.QtCore import QDate, QLocale, QUrl, Qt
+from qgis.PyQt.QtCore import QDate, QLocale, QUrl, Qt, QVariant
 from qgis.PyQt.QtGui import QDesktopServices, QDoubleValidator, QIntValidator, QValidator
 from qgis.PyQt.QtWidgets import QFileDialog, QMessageBox
 from qgis import gui
+from qgis.core import (
+    QgsCoordinateReferenceSystem,
+    QgsFeature,
+    QgsField,
+    QgsGeometry,
+    QgsPointXY,
+    QgsProject,
+    QgsVectorLayer,
+)
 
 # Carrega a classe base da interface dinamicamente do arquivo .ui.
 # Dessa forma, qualquer edição feita no Qt Designer é reconhecida automaticamente!
@@ -65,14 +75,28 @@ class IntegerValidator(QIntValidator):
 
 
 class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, iface=None):
         """Construtor da janela de diálogo.
 
         :param parent: Widget pai (normalmente a janela principal do QGIS iface.mainWindow()).
         """
         super(ReconGeoDialog, self).__init__(parent)
+        self.iface = iface
+        self.setWindowFlags(
+            Qt.Window
+            | Qt.WindowMinimizeButtonHint
+            | Qt.WindowMaximizeButtonHint
+            | Qt.WindowCloseButtonHint
+        )
+        self.setAttribute(Qt.WA_DeleteOnClose, False)
         # Configura e inicializa os componentes definidos no Qt Designer (.ui)
         self.setupUi(self)
+
+        # Define SIRGAS 2000 como sistema de coordenadas padrão
+        if hasattr(self, 'mQgsProjectionSelectionWidget'):
+            self.mQgsProjectionSelectionWidget.setCrs(
+                QgsCoordinateReferenceSystem('EPSG:4674')
+            )
 
         # Variável para armazenar o caminho completo do PDF selecionado
         self.caminho_pdf = None
@@ -95,12 +119,57 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if hasattr(self, 'btn_abrir'):
             self.btn_abrir.clicked.connect(self.importar_dados)
 
+        # Conecta o botão à criação das camadas temporárias
+        if hasattr(self, 'btn_vetor_temp'):
+            self.btn_vetor_temp.clicked.connect(self.criar_camadas_coordenadas)
+
+        # Conecta o botão btn_add_ln_cor à função de adicionar linha
+        if hasattr(self, 'btn_add_ln_cor'):
+            self.btn_add_ln_cor.clicked.connect(self.adicionar_linha_coordenada)
+
         # Define a data atual do sistema como padrão para o campo data_analise
         if hasattr(self, 'data_analise'):
             self.data_analise.setDate(QDate.currentDate())
 
+        # Habilita a remoção somente quando houver uma linha selecionada
+        if hasattr(self, 'btn_remove_ln_cor'):
+            self.btn_remove_ln_cor.setEnabled(False)
+            self.btn_remove_ln_cor.clicked.connect(
+                self.remover_linha_coordenada
+            )
+
+        if hasattr(self, 'tbl_coordenanda'):
+            self.tbl_coordenanda.setSelectionBehavior(
+                QtWidgets.QAbstractItemView.SelectRows
+            )
+            self.tbl_coordenanda.itemSelectionChanged.connect(
+                self.atualizar_estado_btn_remove_ln_cor
+            )
+
         # Configura os validadores float e int nos QLineEdit especificados
         self.configurar_validadores()
+
+    def atualizar_estado_btn_remove_ln_cor(self):
+        """Atualiza o botão conforme a seleção da tabela de coordenadas."""
+        if (hasattr(self, 'btn_remove_ln_cor')
+            and hasattr(self, 'tbl_coordenanda')):
+            linha_selecionada = bool(
+                self.tbl_coordenanda.selectionModel().selectedRows()
+            )
+            self.btn_remove_ln_cor.setEnabled(linha_selecionada)
+
+    def remover_linha_coordenada(self):
+        """Remove da tabela de coordenadas a linha selecionada."""
+        if not hasattr(self, 'tbl_coordenanda'):
+            return
+
+        tabela = self.tbl_coordenanda
+        linha = tabela.currentRow()
+        if linha < 0:
+            return
+
+        tabela.removeRow(linha)
+        self.atualizar_estado_btn_remove_ln_cor()
 
     def configurar_validadores(self):
         """Aplica validação float e int com restrições apropriadas aos QLineEdit."""
@@ -135,7 +204,197 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if hasattr(self, 'segundos'):
             self.segundos.setValidator(IntegerValidator(bottom=0, top=59, parent=self))
 
+    def adicionar_linha_coordenada(self):
+        """Coleta os valores dos campos de coordenada do painel de entrada
+        [vertice_cor, este_cor, norte_cor, confrontante_cor, lote_vizinho_cor],
+        insere uma nova linha na tabela 'tbl_coordenanda' com os dados na ordem fornecida,
+        limpa os campos de entrada e retorna o foco para o campo 'vertice_cor'.
 
+        Colunas da tabela (0-indexed):
+            0 → Vértice      → vertice_cor
+            1 → Este         → este_cor
+            2 → Norte        → norte_cor
+            3 → Confrontante → confrontante_cor
+            4 → Lote Vizinho → lote_vizinho_cor
+        """
+        from qgis.PyQt.QtWidgets import QTableWidgetItem
+
+        # Coleta os valores dos campos na ordem especificada
+        vertice = self.vertice_cor.text().strip() if hasattr(self, 'vertice_cor') else ""
+        este = self.este_cor.text().strip() if hasattr(self, 'este_cor') else ""
+        norte = self.norte_cor.text().strip() if hasattr(self, 'norte_cor') else ""
+        confrontante = self.confrontante_cor.text().strip() if hasattr(self, 'confrontante_cor') else ""
+        lote_vizinho = self.lote_vizinho_cor.text().strip() if hasattr(self, 'lote_vizinho_cor') else ""
+
+        if not hasattr(self, 'tbl_coordenanda'):
+            return
+
+        # Adiciona nova linha ao final da tabela
+        tabela = self.tbl_coordenanda
+        nova_linha = tabela.rowCount()
+        tabela.insertRow(nova_linha)
+
+        # Preenche cada célula na ordem: vértice, este, norte, confrontante, lote vizinho
+        tabela.setItem(nova_linha, 0, QTableWidgetItem(vertice))
+        tabela.setItem(nova_linha, 1, QTableWidgetItem(este))
+        tabela.setItem(nova_linha, 2, QTableWidgetItem(norte))
+        tabela.setItem(nova_linha, 3, QTableWidgetItem(confrontante))
+        tabela.setItem(nova_linha, 4, QTableWidgetItem(lote_vizinho))
+
+        # Rola a tabela até a linha recém-adicionada
+        tabela.scrollToItem(tabela.item(nova_linha, 0))
+
+        # Limpa os campos de entrada
+        for campo in ['vertice_cor', 'este_cor', 'norte_cor', 'confrontante_cor', 'lote_vizinho_cor']:
+            if hasattr(self, campo):
+                getattr(self, campo).clear()
+
+        # Retorna o foco para o campo 'vertice_cor'
+        if hasattr(self, 'vertice_cor'):
+            self.vertice_cor.setFocus()
+
+    def criar_camadas_coordenadas(self):
+        """Cria camadas temporárias de pontos e polígono a partir da tabela."""
+        if not hasattr(self, 'tbl_coordenanda'):
+            return None
+
+        tabela = self.tbl_coordenanda
+        sistema_coordenadas = QgsCoordinateReferenceSystem('EPSG:4674')
+        if hasattr(self, 'mQgsProjectionSelectionWidget'):
+            sistema_selecionado = self.mQgsProjectionSelectionWidget.crs()
+            if sistema_selecionado.isValid():
+                sistema_coordenadas = sistema_selecionado
+
+        pontos = []
+        atributos = []
+        linhas_invalidas = []
+        for numero_linha in range(tabela.rowCount()):
+            item_este = tabela.item(numero_linha, 1)
+            item_norte = tabela.item(numero_linha, 2)
+            valor_este = item_este.text().strip() if item_este else ''
+            valor_norte = item_norte.text().strip() if item_norte else ''
+
+            try:
+                coordenada_este = float(valor_este.replace(',', '.'))
+                coordenada_norte = float(valor_norte.replace(',', '.'))
+            except (TypeError, ValueError):
+                linhas_invalidas.append(numero_linha + 1)
+                continue
+
+            pontos.append(QgsPointXY(coordenada_este, coordenada_norte))
+            atributos.append([
+                tabela.item(numero_linha, coluna).text().strip()
+                if tabela.item(numero_linha, coluna) else ''
+                for coluna in range(5)
+            ])
+
+        if len(pontos) < 3:
+            QMessageBox.warning(
+                self,
+                'Coordenadas insuficientes',
+                'Informe pelo menos três linhas com coordenadas '
+                'Este e Norte válidas.'
+            )
+            return None
+
+        texto_crs = sistema_coordenadas.authid() or 'EPSG:4674'
+        camada_pontos = QgsVectorLayer(
+            f'Point?crs={texto_crs}',
+            'ReconGeo - Pontos',
+            'memory'
+        )
+        camada_pontos.dataProvider().addAttributes([
+            QgsField('vertice', QVariant.String),
+            QgsField('este', QVariant.Double),
+            QgsField('norte', QVariant.Double),
+            QgsField('confrontante', QVariant.String),
+            QgsField('lote_vizinho', QVariant.String),
+        ])
+        camada_pontos.updateFields()
+
+        feicoes_pontos = []
+        for ponto, valores in zip(pontos, atributos):
+            feicao_ponto = QgsFeature(camada_pontos.fields())
+            feicao_ponto.setGeometry(QgsGeometry.fromPointXY(ponto))
+            feicao_ponto.setAttributes([
+                valores[0],
+                float(valores[1].replace(',', '.')),
+                float(valores[2].replace(',', '.')),
+                valores[3],
+                valores[4],
+            ])
+            feicoes_pontos.append(feicao_ponto)
+        camada_pontos.dataProvider().addFeatures(feicoes_pontos)
+
+        camada_poligono = QgsVectorLayer(
+            f'Polygon?crs={texto_crs}',
+            'ReconGeo - Polígono',
+            'memory'
+        )
+
+        dados_titulo_poligono = [
+            ('processo', self.processo.text().strip()
+             if hasattr(self, 'processo') else ''),
+            ('gleba', self.gleba.text().strip()
+             if hasattr(self, 'gleba') else ''),
+            ('num_titulo', self.num_titulo.text().strip()
+             if hasattr(self, 'num_titulo') else ''),
+            ('num_lote', self.num_lote.text().strip()
+             if hasattr(self, 'num_lote') else ''),
+            ('nome_lote', self.nome_lote.text().strip()
+             if hasattr(self, 'nome_lote') else ''),
+            ('data_titulo', self.data_titulo.date().toString('dd/MM/yyyy')
+             if hasattr(self, 'data_titulo') else ''),
+            ('titulado', self.titulado.text().strip()
+             if hasattr(self, 'titulado') else ''),
+            ('area', self.area.text().strip()
+             if hasattr(self, 'area') else ''),
+            ('uf', self.uf.text().strip() if hasattr(self, 'uf') else ''),
+            ('municipio', self.municipio.text().strip()
+             if hasattr(self, 'municipio') else ''),
+            ('data_analise', self.data_analise.date().toString('dd/MM/yyyy')
+             if hasattr(self, 'data_analise') else ''),
+            ('chkbox_sigef', str(self.chkbox_sigef.isChecked())
+             if hasattr(self, 'chkbox_sigef') else 'False'),
+            ('planilha_status', self.planilha_status.currentText()
+             if hasattr(self, 'planilha_status') else ''),
+            ('obs', self.obs.toPlainText().strip()
+             if hasattr(self, 'obs') else ''),
+            ('pdf_original', os.path.basename(self.caminho_pdf)
+             if self.caminho_pdf else ''),
+            ('pdf_copiado', ''),
+        ]
+        camada_poligono.dataProvider().addAttributes([
+            QgsField('num_pontos', QVariant.Int),
+            *[QgsField(chave, QVariant.String)
+              for chave, _ in dados_titulo_poligono],
+        ])
+        camada_poligono.updateFields()
+
+        feicao_poligono = QgsFeature(camada_poligono.fields())
+        anel_poligono = pontos + [pontos[0]]
+        feicao_poligono.setGeometry(QgsGeometry.fromPolygonXY([anel_poligono]))
+        feicao_poligono.setAttributes([
+            len(pontos),
+            *[valor for _, valor in dados_titulo_poligono],
+        ])
+        camada_poligono.dataProvider().addFeature(feicao_poligono)
+
+        QgsProject.instance().addMapLayers([camada_pontos, camada_poligono])
+        if self.iface is not None:
+            canvas = self.iface.mapCanvas()
+            canvas.setExtent(camada_poligono.extent())
+            canvas.refresh()
+
+        if linhas_invalidas:
+            QMessageBox.warning(
+                self,
+                'Linhas ignoradas',
+                'As seguintes linhas não possuem coordenadas válidas: '
+                + ', '.join(map(str, linhas_invalidas))
+            )
+
+        return camada_pontos, camada_poligono
 
     def abrir_pdf(self):
         """Abre uma caixa de diálogo para seleção de um arquivo PDF.
@@ -311,12 +570,35 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             ("pdf_copiado", pdf_cop),
         ]
 
-        # Salva o arquivo no formato .txt com a seção [TITULO]
+        crs_authid = "EPSG:4674"
+        if hasattr(self, "mQgsProjectionSelectionWidget"):
+            crs = self.mQgsProjectionSelectionWidget.crs()
+            if crs.isValid() and crs.authid():
+                crs_authid = crs.authid()
+
+        # Salva o arquivo no formato .txt com as seções [TITULO] e [SRC]
         try:
             with open(caminho_arquivo, "w", encoding="utf-8") as f:
                 f.write("[TITULO]\n")
                 for chave, valor in dados_titulo:
                     f.write(f"{chave} = {valor}\n")
+                f.write("\n[SRC]\n")
+                f.write(f"crs_authid = {crs_authid}\n")
+
+                if hasattr(self, "tbl_coordenanda"):
+                    f.write("\n[TABELA_COORDENADAS]\n")
+                    tabela = self.tbl_coordenanda
+                    for numero_linha in range(tabela.rowCount()):
+                        valores_linha = [
+                            tabela.item(numero_linha, coluna).text()
+                            if tabela.item(numero_linha, coluna) else ""
+                            for coluna in range(tabela.columnCount())
+                        ]
+                        registro = json.dumps(
+                            valores_linha,
+                            ensure_ascii=False,
+                        )
+                        f.write(f"linha_{numero_linha + 1} = {registro}\n")
 
             mensagem_sucesso = f"Dados salvos com sucesso!\n\nArquivo TXT: {caminho_arquivo}"
             if pdf_cop and caminho_pdf_copiado:
@@ -349,6 +631,9 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             return
 
         dados_titulo = {}
+        dados_src = {}
+        dados_coordenadas = []
+        tem_secao_coordenadas = False
         secao_atual = None
         chave_atual = None
 
@@ -361,14 +646,21 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                     # Identifica cabeçalho de seção (ex: [TITULO])
                     if linha_strip.startswith("[") and linha_strip.endswith("]"):
                         secao_atual = linha_strip[1:-1].strip().upper()
+                        if secao_atual == "TABELA_COORDENADAS":
+                            tem_secao_coordenadas = True
                         chave_atual = None
                         continue
 
-                    if secao_atual == "TITULO":
+                    if secao_atual in ["TITULO", "SRC", "TABELA_COORDENADAS"]:
                         if "=" in linha:
                             chave, valor = linha.split("=", 1)
                             chave_atual = chave.strip()
-                            dados_titulo[chave_atual] = valor.strip()
+                            if secao_atual == "TITULO":
+                                dados_titulo[chave_atual] = valor.strip()
+                            elif secao_atual == "SRC":
+                                dados_src[chave_atual] = valor.strip()
+                            else:
+                                dados_coordenadas.append(valor.strip())
                         elif chave_atual == "obs":
                             # Continuação de observações com múltiplas linhas
                             dados_titulo["obs"] += "\n" + linha
@@ -432,6 +724,40 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         # Preenche observações (QTextEdit)
         if "obs" in dados_titulo and hasattr(self, "obs"):
             self.obs.setPlainText(dados_titulo["obs"])
+
+        # Reconstrói a tabela de coordenadas importada
+        if tem_secao_coordenadas and hasattr(self, "tbl_coordenanda"):
+            tabela = self.tbl_coordenanda
+            tabela.setRowCount(0)
+            for registro in dados_coordenadas:
+                try:
+                    valores_linha = json.loads(registro)
+                except json.JSONDecodeError:
+                    continue
+
+                if not isinstance(valores_linha, list):
+                    continue
+
+                numero_linha = tabela.rowCount()
+                tabela.insertRow(numero_linha)
+                for coluna in range(tabela.columnCount()):
+                    valor = (
+                        valores_linha[coluna]
+                        if coluna < len(valores_linha)
+                        else ""
+                    )
+                    tabela.setItem(
+                        numero_linha,
+                        coluna,
+                        QtWidgets.QTableWidgetItem(str(valor)),
+                    )
+
+        # Atualiza o sistema de coordenadas salvo no arquivo
+        crs_authid = dados_src.get("crs_authid", "EPSG:4674")
+        if hasattr(self, "mQgsProjectionSelectionWidget"):
+            crs = QgsCoordinateReferenceSystem(crs_authid)
+            if crs.isValid():
+                self.mQgsProjectionSelectionWidget.setCrs(crs)
 
         # Atualiza a vinculação do PDF analisado se constar no arquivo importado
         pdf_orig = dados_titulo.get("pdf_original", "")
