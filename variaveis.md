@@ -1,7 +1,7 @@
 # Informações sobre o formulário do QT
 
 
-## Botões
+## Botões (QPushButton)
 
 - btn_abrir
 - btn_abrir_pdf
@@ -16,7 +16,7 @@
 - btn_add_ln_cor
 - btn_remove_ln_cor
 
-## label
+## label (QLabel)
 
 - lbl_area
 - lbl_data_titulo
@@ -33,56 +33,56 @@
 - lbl_processo
 - lbl_gleba
 
-## campos linha
+## campos linha (QLineEdit)
 
 - municipio
 - nome_lote
 - titulado
-- area
 - uf
 - gleba
 - num_lote
 - num_titulo
 - processo
+- area
+- distancia
 - coord_este_ini
 - coord_norte_ini
 - confrontante_az
-- distancia
+- este_cor
+- norte_cor
 - graus
 - minutos
-- num_lote_az
 - segundos
+- num_lote_az
 - vertice_az
 - vertice_ini
 - confrontante_cor
-- este_cor
 - lote_vizinho_cor
-- norte_cor
 - vertice_cor
 
-## Data
+## Data (QDateEdit)
 
 - data_titulo
 - data_analise
 
-## Check box
+## Check box (QCheckBox)
 
 - chkbox_sigef
 
-## campo de texto
+## campo de texto (QTextEdit)
 
 - obs
 
-## combobox
+## combobox (QComboBox)
 
 - planilha_status
 
-## abas
+## abas (QTabWidget) (QWidget)
 
 - azimute
 - coordenadas
 
-## tabelas
+## tabelas (QTableWidget)
 
 - tbl_azimute
 - tbl_coordenada

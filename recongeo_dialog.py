@@ -10,8 +10,8 @@
 import os
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
-from qgis.PyQt.QtCore import QUrl
-from qgis.PyQt.QtGui import QDesktopServices
+from qgis.PyQt.QtCore import QLocale, QUrl
+from qgis.PyQt.QtGui import QDesktopServices, QDoubleValidator
 from qgis.PyQt.QtWidgets import QFileDialog, QMessageBox
 from qgis import gui
 
@@ -19,6 +19,24 @@ from qgis import gui
 # Dessa forma, qualquer edição feita no Qt Designer é reconhecida automaticamente!
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'recongeo_dialog_base.ui'))
+
+
+class FloatValidator(QDoubleValidator):
+    """Validador numérico de ponto flutuante (float) que:
+    - Aceita tanto ponto (.) quanto vírgula (,) como separador decimal.
+    - Limita estritamente o número de casas decimais ao valor configurado.
+    - Suporta valores positivos e negativos.
+    """
+
+    def __init__(self, decimals=2, bottom=-1e15, top=1e15, parent=None):
+        super(FloatValidator, self).__init__(bottom, top, decimals, parent)
+        self.setNotation(QDoubleValidator.StandardNotation)
+        self.setLocale(QLocale(QLocale.C))
+
+    def validate(self, input_str, pos):
+        normalized = input_str.replace(',', '.')
+        state, _, pos = super(FloatValidator, self).validate(normalized, pos)
+        return state, input_str, pos
 
 
 class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
@@ -37,6 +55,31 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         # Conecta o botão btn_abrir_pdf à função que seleciona e abre o PDF
         if hasattr(self, 'btn_abrir_pdf'):
             self.btn_abrir_pdf.clicked.connect(self.abrir_pdf)
+
+        # Configura os validadores float nos QLineEdit especificados
+        self.configurar_validadores()
+
+    def configurar_validadores(self):
+        """Aplica validação float com restrição de casas decimais aos QLineEdit."""
+        # 'area': 4 casas decimais
+        if hasattr(self, 'area'):
+            self.area.setValidator(FloatValidator(decimals=4, parent=self))
+
+        # 'distancia': 2 casas decimais
+        if hasattr(self, 'distancia'):
+            self.distancia.setValidator(FloatValidator(decimals=2, parent=self))
+
+        # 'coord_este_ini', 'coord_norte_ini', 'confrontante_az', 'este_cor', 'norte_cor': 6 casas decimais
+        campos_6_decimais = [
+            'coord_este_ini',
+            'coord_norte_ini',
+            'este_cor',
+            'norte_cor',
+        ]
+        for nome_campo in campos_6_decimais:
+            if hasattr(self, nome_campo):
+                getattr(self, nome_campo).setValidator(FloatValidator(decimals=6, parent=self))
+
 
     def abrir_pdf(self):
         """Abre uma caixa de diálogo para seleção de um arquivo PDF.
