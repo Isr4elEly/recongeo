@@ -104,6 +104,11 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         # Variável para armazenar o nome padrão formatado do arquivo
         self.nome_padrao_do_arquivo = None
 
+        # Valores do vértice inicial da tabela de azimute
+        self.vertice_ini_valor = None
+        self.coord_este_ini_valor = None
+        self.coord_norte_ini_valor = None
+
         # Conecta o botão btn_abrir_pdf à função que seleciona e abre o PDF
         if hasattr(self, 'btn_abrir_pdf'):
             self.btn_abrir_pdf.clicked.connect(self.abrir_pdf)
@@ -122,6 +127,19 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         # Conecta o botão à limpeza completa do formulário
         if hasattr(self, 'btn_limp_form'):
             self.btn_limp_form.clicked.connect(self.limpar_formulario)
+
+        if hasattr(self, 'btn_add_vert_ini_az'):
+            self.btn_add_vert_ini_az.clicked.connect(
+                lambda checked=False: self.adicionar_vertice_inicial_az()
+            )
+
+        if hasattr(self, 'btn_remove_vert_ini_az'):
+            self.btn_remove_vert_ini_az.setEnabled(False)
+            self.btn_remove_vert_ini_az.clicked.connect(
+                lambda checked=False: self.remover_vertice_inicial_az()
+            )
+
+        self.configurar_campos_azimute(False)
 
         # Conecta o botão à criação das camadas temporárias
         if hasattr(self, 'btn_vetor_temp'):
@@ -177,6 +195,96 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         tabela.removeRow(linha)
         self.atualizar_estado_btn_remove_ln_cor()
 
+    def configurar_campos_azimute(self, habilitado):
+        """Habilita ou desabilita os campos dependentes do vértice inicial."""
+        campos = [
+            'confrontante_az',
+            'graus',
+            'minutos',
+            'segundos',
+            'num_lote_az',
+            'vertice_az',
+        ]
+        for nome_campo in campos:
+            if hasattr(self, nome_campo):
+                getattr(self, nome_campo).setEnabled(habilitado)
+
+    def adicionar_vertice_inicial_az(self):
+        """Insere o vértice inicial como primeira linha da tabela de azimute."""
+        if self.vertice_ini_valor is not None:
+            return
+
+        campos = ['vertice_ini', 'coord_este_ini', 'coord_norte_ini']
+        valores = {}
+        for nome_campo in campos:
+            if not hasattr(self, nome_campo):
+                return
+            valores[nome_campo] = getattr(self, nome_campo).text().strip()
+
+        if not all(valores.values()):
+            QMessageBox.warning(
+                self,
+                'Dados incompletos',
+                'Preencha o vértice inicial e as coordenadas Este e Norte.'
+            )
+            return
+
+        try:
+            float(valores['coord_este_ini'].replace(',', '.'))
+            float(valores['coord_norte_ini'].replace(',', '.'))
+        except ValueError:
+            QMessageBox.warning(
+                self,
+                'Coordenadas inválidas',
+                'As coordenadas Este e Norte devem ser numéricas.'
+            )
+            return
+
+        self.vertice_ini_valor = valores['vertice_ini']
+        self.coord_este_ini_valor = valores['coord_este_ini']
+        self.coord_norte_ini_valor = valores['coord_norte_ini']
+
+        if hasattr(self, 'tbl_azimute'):
+            from qgis.PyQt.QtWidgets import QTableWidgetItem
+
+            self.tbl_azimute.insertRow(0)
+            valores_linha = [
+                self.vertice_ini_valor,
+                self.coord_este_ini_valor,
+                self.coord_norte_ini_valor,
+            ]
+            for coluna, valor in enumerate(valores_linha):
+                self.tbl_azimute.setItem(
+                    0,
+                    coluna,
+                    QTableWidgetItem(valor),
+                )
+
+        if hasattr(self, 'btn_add_vert_ini_az'):
+            self.btn_add_vert_ini_az.setEnabled(False)
+        if hasattr(self, 'btn_remove_vert_ini_az'):
+            self.btn_remove_vert_ini_az.setEnabled(True)
+        self.configurar_campos_azimute(True)
+
+    def remover_vertice_inicial_az(self):
+        """Remove a primeira linha da tabela e libera uma nova inserção."""
+        if not hasattr(self, 'tbl_azimute'):
+            return
+
+        if self.vertice_ini_valor is None or self.tbl_azimute.rowCount() == 0:
+            return
+
+        self.tbl_azimute.removeRow(0)
+        self.vertice_ini_valor = None
+        self.coord_este_ini_valor = None
+        self.coord_norte_ini_valor = None
+
+        if hasattr(self, 'btn_add_vert_ini_az'):
+            self.btn_add_vert_ini_az.setEnabled(True)
+        if hasattr(self, 'btn_remove_vert_ini_az'):
+            self.btn_remove_vert_ini_az.setEnabled(False)
+        self.configurar_campos_azimute(False)
+
     def limpar_formulario(self):
         """Confirma e limpa campos, tabelas e arquivos selecionados."""
         resposta = QMessageBox.question(
@@ -218,6 +326,9 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
 
         self.caminho_pdf = None
         self.nome_padrao_do_arquivo = None
+        self.vertice_ini_valor = None
+        self.coord_este_ini_valor = None
+        self.coord_norte_ini_valor = None
 
         for nome_label in ['lbl_arquivo', 'lbl_arquivo_padrao']:
             if hasattr(self, nome_label):
@@ -228,6 +339,11 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         self.atualizar_estado_btn_remove_ln_cor()
         if hasattr(self, 'btn_remove_ln_az'):
             self.btn_remove_ln_az.setEnabled(False)
+        self.configurar_campos_azimute(False)
+        if hasattr(self, 'btn_add_vert_ini_az'):
+            self.btn_add_vert_ini_az.setEnabled(True)
+        if hasattr(self, 'btn_remove_vert_ini_az'):
+            self.btn_remove_vert_ini_az.setEnabled(False)
 
     def configurar_validadores(self):
         """Aplica validação float e int com restrições apropriadas aos QLineEdit."""

@@ -12,6 +12,7 @@
 - btn_az_recal_tabela
 - btn_az_up_ln
 - btn_add_vert_ini_az
+- btn_remove_vert_ini_az
 - btn_add_ln_az
 - btn_remove_ln_az
 - btn_add_ln_cor
@@ -48,18 +49,18 @@
 - distancia
 - coord_este_ini
 - coord_norte_ini
+- vertice_ini
 - confrontante_az
-- vertice_cor
-- este_cor
-- norte_cor
-- confrontante_cor
-- lote_vizinho_cor
 - graus
 - minutos
 - segundos
 - num_lote_az
 - vertice_az
-- vertice_ini
+- vertice_cor
+- este_cor
+- norte_cor
+- confrontante_cor
+- lote_vizinho_cor
 
 ## Data (QDateEdit)
 
