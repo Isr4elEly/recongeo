@@ -180,20 +180,16 @@
      <enum>QFrame::Raised</enum>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="lbl_data_analise">
-       <property name="text">
-        <string>Data da Análise</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <widget class="QDateEdit" name="data_analise"/>
      </item>
-     <item row="0" column="2">
-      <widget class="QCheckBox" name="chkbox_sigef">
+     <item row="1" column="1" colspan="3">
+      <widget class="QTextEdit" name="obs"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lbl_obs">
        <property name="text">
-        <string>Cadastro SIGEF</string>
+        <string>Observações</string>
        </property>
       </widget>
      </item>
@@ -219,13 +215,17 @@
        </item>
       </widget>
      </item>
-     <item row="1" column="1" colspan="3">
-      <widget class="QTextEdit" name="obs"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="lbl_obs">
+     <item row="0" column="0">
+      <widget class="QLabel" name="lbl_data_analise">
        <property name="text">
-        <string>Observações</string>
+        <string>Data da Análise</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QCheckBox" name="chkbox_sigef">
+       <property name="text">
+        <string>Cadastro SIGEF</string>
        </property>
       </widget>
      </item>
@@ -265,6 +265,9 @@
      <widget class="QPushButton" name="btn_salvar">
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Salva os dados digitados em arquivo do plugin.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="whatsThis">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Salve os dados digitados para utilizar posteriormente.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(143, 240, 164);</string>
@@ -406,6 +409,11 @@
      <column>
       <property name="text">
        <string>Confrontante</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Lote Vizinho</string>
       </property>
      </column>
     </widget>
@@ -574,6 +582,22 @@
        <string>Confrontante</string>
       </property>
      </widget>
+     <widget class="QLineEdit" name="num_lote_az">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>190</y>
+        <width>211</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Número do lote</string>
+      </property>
+     </widget>
      <widget class="QPushButton" name="btn_add_ln_az">
       <property name="geometry">
        <rect>
@@ -718,6 +742,11 @@
        <string>Confrontante</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Lote Vizinho</string>
+      </property>
+     </column>
     </widget>
     <widget class="QFrame" name="frame_3">
      <property name="geometry">
@@ -851,6 +880,22 @@
        <string>+</string>
       </property>
      </widget>
+     <widget class="QLineEdit" name="lote_vizinho_cor">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>241</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Lote Vizinho</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
@@ -937,6 +982,7 @@
   <tabstop>este_cor</tabstop>
   <tabstop>norte_cor</tabstop>
   <tabstop>confrontante_cor</tabstop>
+  <tabstop>lote_vizinho_cor</tabstop>
   <tabstop>btn_salvar</tabstop>
   <tabstop>tbl_azimute</tabstop>
   <tabstop>vertice_ini</tabstop>
@@ -948,6 +994,7 @@
   <tabstop>distancia</tabstop>
   <tabstop>vertice_az</tabstop>
   <tabstop>confrontante_az</tabstop>
+  <tabstop>num_lote_az</tabstop>
   <tabstop>btn_add_ln_az</tabstop>
   <tabstop>btn_remove_ln_az</tabstop>
   <tabstop>btn_az_recal_tabela</tabstop>

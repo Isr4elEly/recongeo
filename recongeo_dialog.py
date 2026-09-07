@@ -26,6 +26,7 @@ from qgis.core import (
     QgsPointXY,
     QgsProject,
     QgsVectorLayer,
+    QgsVectorFileWriter,
 )
 
 # Carrega a classe base da interface dinamicamente do arquivo .ui.
@@ -101,6 +102,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
 
         # Variável para armazenar o caminho completo do PDF selecionado
         self.caminho_pdf = None
+        self.pdf_copiado = ''
 
         # Variável para armazenar o nome padrão formatado do arquivo
         self.nome_padrao_do_arquivo = None
@@ -119,11 +121,15 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             self.btn_salvar.clicked.connect(self.salvar_dados)
 
         if hasattr(self, 'btn_dados_finais'):
-            self.btn_dados_finais.clicked.connect(self.formatar_nome_padrao_do_arquivo)
+            self.btn_dados_finais.clicked.connect(
+                lambda checked=False: self.arquivos_finais()
+            )
 
-        # Conecta o botão btn_abrir à função de importar dados
+        # Confirma a limpeza antes de abrir um novo arquivo
         if hasattr(self, 'btn_abrir'):
-            self.btn_abrir.clicked.connect(self.importar_dados)
+            self.btn_abrir.clicked.connect(
+                lambda checked=False: self.confirmar_novo_arquivo()
+            )
 
         # Conecta o botão à limpeza completa do formulário
         if hasattr(self, 'btn_limp_form'):
@@ -553,17 +559,33 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         self.atualizar_estado_botoes_azimute()
         self.atualizar_estado_abas_tabelas()
 
-    def limpar_formulario(self):
-        """Confirma e limpa campos, tabelas e arquivos selecionados."""
+    def confirmar_novo_arquivo(self):
+        """Confirma a limpeza e inicia a importação de um novo arquivo."""
         resposta = QMessageBox.question(
             self,
-            'Confirmar limpeza',
-            'Deseja realmente limpar todos os campos e tabelas do formulário?',
+            'Abrir novo arquivo',
+            'Ao abrir um novo arquivo, as informações digitadas no '
+            'formulário serão apagadas. Deseja continuar?',
             QMessageBox.Yes | QMessageBox.No,
             QMessageBox.No,
         )
-        if resposta != QMessageBox.Yes:
-            return
+        if resposta == QMessageBox.Yes:
+            self.limpar_formulario(confirmar=False)
+            self.importar_dados()
+
+    def limpar_formulario(self, confirmar=True):
+        """Confirma e limpa campos, tabelas e arquivos selecionados."""
+        if confirmar:
+            resposta = QMessageBox.question(
+                self,
+                'Confirmar limpeza',
+                'Deseja realmente limpar todos os campos e tabelas '
+                'do formulário?',
+                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.No,
+            )
+            if resposta != QMessageBox.Yes:
+                return
 
         for campo in self.findChildren(QtWidgets.QLineEdit):
             campo.clear()
@@ -593,6 +615,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             )
 
         self.caminho_pdf = None
+        self.pdf_copiado = ''
         self.nome_padrao_do_arquivo = None
         self.vertice_ini_valor = None
         self.coord_este_ini_valor = None
@@ -699,7 +722,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             self.vertice_cor.setFocus()
         self.atualizar_estado_abas_tabelas()
 
-    def criar_camadas_coordenadas(self):
+    def criar_camadas_coordenadas(self, adicionar_projeto=True):
         """Cria pontos, linhas e polígono com a tabela preenchida."""
         usa_azimute = (
             hasattr(self, 'tbl_azimute')
@@ -845,7 +868,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
              if hasattr(self, 'obs') else ''),
             ('pdf_original', os.path.basename(self.caminho_pdf)
              if self.caminho_pdf else ''),
-            ('pdf_copiado', ''),
+            ('pdf_copiado', self.pdf_copiado),
         ]
         camada_poligono.dataProvider().addAttributes([
             QgsField('num_pontos', QVariant.Int),
@@ -894,12 +917,13 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             feicoes_linhas.append(feicao_linha)
         camada_linhas.dataProvider().addFeatures(feicoes_linhas)
 
-        QgsProject.instance().addMapLayers([
-            camada_pontos,
-            camada_poligono,
-            camada_linhas,
-        ])
-        if self.iface is not None:
+        if adicionar_projeto:
+            QgsProject.instance().addMapLayers([
+                camada_pontos,
+                camada_poligono,
+                camada_linhas,
+            ])
+        if adicionar_projeto and self.iface is not None:
             canvas = self.iface.mapCanvas()
             canvas.setExtent(camada_poligono.extent())
             canvas.refresh()
@@ -1034,6 +1058,159 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             )
             return (nome_original, "", None)
 
+    def arquivos_finais(self):
+        """Gera a pasta final com TXT, PDF e GPKG das camadas vetoriais."""
+        nome_padrao = self.formatar_nome_padrao_do_arquivo()
+        if not nome_padrao:
+            return
+
+        pasta_base = QFileDialog.getExistingDirectory(
+            self,
+            'Selecionar local dos arquivos finais',
+            '',
+        )
+        if not pasta_base:
+            return
+
+        pasta_final = os.path.join(pasta_base, nome_padrao)
+        os.makedirs(pasta_final, exist_ok=True)
+        caminho_txt = os.path.join(pasta_final, f'{nome_padrao}.txt')
+        caminho_gpkg = os.path.join(pasta_final, f'{nome_padrao}.gpkg')
+
+        pdf_orig, pdf_cop, caminho_pdf_copiado = self.salvar_copia_pdf(
+            caminho_txt,
+            nome_padrao,
+        )
+        self.pdf_copiado = pdf_cop
+
+        dados_titulo = [
+            ('processo', self.processo.text().strip()
+             if hasattr(self, 'processo') else ''),
+            ('gleba', self.gleba.text().strip()
+             if hasattr(self, 'gleba') else ''),
+            ('num_titulo', self.num_titulo.text().strip()
+             if hasattr(self, 'num_titulo') else ''),
+            ('num_lote', self.num_lote.text().strip()
+             if hasattr(self, 'num_lote') else ''),
+            ('nome_lote', self.nome_lote.text().strip()
+             if hasattr(self, 'nome_lote') else ''),
+            ('data_titulo', self.data_titulo.date().toString('dd/MM/yyyy')
+             if hasattr(self, 'data_titulo') else ''),
+            ('titulado', self.titulado.text().strip()
+             if hasattr(self, 'titulado') else ''),
+            ('area', self.area.text().strip()
+             if hasattr(self, 'area') else ''),
+            ('uf', self.uf.text().strip() if hasattr(self, 'uf') else ''),
+            ('municipio', self.municipio.text().strip()
+             if hasattr(self, 'municipio') else ''),
+            ('data_analise', self.data_analise.date().toString('dd/MM/yyyy')
+             if hasattr(self, 'data_analise') else ''),
+            ('chkbox_sigef', str(self.chkbox_sigef.isChecked())
+             if hasattr(self, 'chkbox_sigef') else 'False'),
+            ('planilha_status', self.planilha_status.currentText()
+             if hasattr(self, 'planilha_status') else ''),
+            ('obs', self.obs.toPlainText().strip()
+             if hasattr(self, 'obs') else ''),
+            ('pdf_original', pdf_orig),
+            ('pdf_copiado', pdf_cop),
+        ]
+        crs_authid = 'EPSG:4674'
+        if hasattr(self, 'mQgsProjectionSelectionWidget'):
+            crs = self.mQgsProjectionSelectionWidget.crs()
+            if crs.isValid() and crs.authid():
+                crs_authid = crs.authid()
+
+        try:
+            with open(caminho_txt, 'w', encoding='utf-8') as arquivo:
+                arquivo.write('[TITULO]\n')
+                for chave, valor in dados_titulo:
+                    arquivo.write(f'{chave} = {valor}\n')
+                arquivo.write(f'\n[SRC]\ncrs_authid = {crs_authid}\n')
+                for nome_secao, tabela_nome in [
+                    ('TABELA_COORDENADAS', 'tbl_coordenanda'),
+                    ('TABELA_AZIMUTE', 'tbl_azimute'),
+                ]:
+                    tabela = getattr(self, tabela_nome, None)
+                    if tabela is None:
+                        continue
+                    arquivo.write(f'\n[{nome_secao}]\n')
+                    for numero_linha in range(tabela.rowCount()):
+                        valores = [
+                            tabela.item(numero_linha, coluna).text()
+                            if tabela.item(numero_linha, coluna) else ''
+                            for coluna in range(tabela.columnCount())
+                        ]
+                        registro = json.dumps(valores, ensure_ascii=False)
+                        arquivo.write(
+                            f'linha_{numero_linha + 1} = {registro}\n'
+                        )
+
+            camadas = self.criar_camadas_coordenadas(adicionar_projeto=False)
+            if not camadas:
+                return
+
+            transform_context = QgsProject.instance().transformContext()
+            opcoes = QgsVectorFileWriter.SaveVectorOptions()
+            opcoes.driverName = 'GPKG'
+            opcoes.layerName = camadas[0].name()
+            opcoes.actionOnExistingFile = (
+                QgsVectorFileWriter.CreateOrOverwriteFile
+            )
+            resultado = QgsVectorFileWriter.writeAsVectorFormatV3(
+                camadas[0], caminho_gpkg, transform_context, opcoes
+            )
+            erro = resultado[0]
+            mensagem = resultado[1] if len(resultado) > 1 else ''
+            if erro != QgsVectorFileWriter.NoError:
+                raise RuntimeError(mensagem)
+
+            for camada in camadas[1:]:
+                opcoes.layerName = camada.name()
+                opcoes.actionOnExistingFile = (
+                    QgsVectorFileWriter.CreateOrOverwriteLayer
+                )
+                resultado = QgsVectorFileWriter.writeAsVectorFormatV3(
+                    camada, caminho_gpkg, transform_context, opcoes
+                )
+                erro = resultado[0]
+                mensagem = resultado[1] if len(resultado) > 1 else ''
+                if erro != QgsVectorFileWriter.NoError:
+                    raise RuntimeError(mensagem)
+
+            camadas_finais = []
+            for camada in camadas:
+                caminho_camada = (
+                    f'{caminho_gpkg}|layername={camada.name()}'
+                )
+                camada_final = QgsVectorLayer(
+                    caminho_camada,
+                    camada.name(),
+                    'ogr',
+                )
+                if not camada_final.isValid():
+                    raise RuntimeError(
+                        f'Não foi possível carregar a camada {camada.name()}.'
+                    )
+                camadas_finais.append(camada_final)
+
+            QgsProject.instance().addMapLayers(camadas_finais)
+            if self.iface is not None:
+                canvas = self.iface.mapCanvas()
+                canvas.setExtent(camadas_finais[1].extent())
+                canvas.refresh()
+
+            QMessageBox.information(
+                self,
+                'Arquivos finais',
+                f'Arquivos finais gerados em:\n{pasta_final}',
+            )
+        except Exception as erro:
+            QMessageBox.critical(
+                self,
+                'Erro ao gerar arquivos finais',
+                f'Não foi possível gerar os arquivos finais:\n{erro}',
+            )
+
     def salvar_dados(self):
         """Coleta as informações dos campos do título, valida os campos obrigatórios,
         abre o diálogo de seleção de local com o 'nome_padrao_do_arquivo',
@@ -1067,6 +1244,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
 
         # Salva uma cópia do PDF analisado no mesmo diretório usando o mesmo nome padrão
         pdf_orig, pdf_cop, caminho_pdf_copiado = self.salvar_copia_pdf(caminho_arquivo, nome_padrao)
+        self.pdf_copiado = pdf_cop
 
         # Coleta os valores de todos os campos listados
         dados_titulo = [
@@ -1363,6 +1541,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         # Atualiza a vinculação do PDF analisado se constar no arquivo importado
         pdf_orig = dados_titulo.get("pdf_original", "")
         pdf_cop = dados_titulo.get("pdf_copiado", "")
+        self.pdf_copiado = pdf_cop
         if pdf_cop:
             pasta_txt = os.path.dirname(caminho_arquivo)
             caminho_pdf_junto = os.path.join(pasta_txt, pdf_cop)
