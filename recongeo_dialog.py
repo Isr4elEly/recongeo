@@ -140,6 +140,18 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                 lambda checked=False: self.remover_vertice_inicial_az()
             )
 
+        if hasattr(self, 'btn_remove_ln_az'):
+            self.btn_remove_ln_az.setEnabled(False)
+            self.btn_remove_ln_az.clicked.connect(
+                lambda checked=False: self.remover_linha_azimute()
+            )
+
+        if hasattr(self, 'btn_az_recal_tabela'):
+            self.btn_az_recal_tabela.setEnabled(False)
+            self.btn_az_recal_tabela.clicked.connect(
+                lambda checked=False: self.recalcular_tabela_azimute()
+            )
+
         self.configurar_campos_azimute(False)
 
         # Conecta o botão à criação das camadas temporárias
@@ -176,6 +188,14 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                 self.atualizar_estado_btn_remove_ln_cor
             )
 
+        if hasattr(self, 'tbl_azimute'):
+            self.tbl_azimute.setSelectionBehavior(
+                QtWidgets.QAbstractItemView.SelectRows
+            )
+            self.tbl_azimute.itemSelectionChanged.connect(
+                self.atualizar_estado_botoes_azimute
+            )
+
         # Configura os validadores float e int nos QLineEdit especificados
         self.configurar_validadores()
 
@@ -200,6 +220,18 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
 
         tabela.removeRow(linha)
         self.atualizar_estado_btn_remove_ln_cor()
+
+    def atualizar_estado_botoes_azimute(self):
+        """Atualiza os botões conforme a seleção de segmentos."""
+        if not hasattr(self, 'tbl_azimute'):
+            return
+
+        linhas_selecionadas = self.tbl_azimute.selectionModel().selectedRows()
+        linha_selecionada = bool(linhas_selecionadas)
+        if hasattr(self, 'btn_remove_ln_az'):
+            self.btn_remove_ln_az.setEnabled(linha_selecionada)
+        if hasattr(self, 'btn_az_recal_tabela'):
+            self.btn_az_recal_tabela.setEnabled(linha_selecionada)
 
     def configurar_campos_azimute(self, habilitado):
         """Habilita ou desabilita os campos dependentes do vértice inicial."""
@@ -396,6 +428,74 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             getattr(self, nome_campo).clear()
         self.graus.setFocus()
 
+    def recalcular_linhas_azimute(self, linha_inicial):
+        """Recalcula uma linha e todas as linhas seguintes da tabela."""
+        tabela = self.tbl_azimute
+        if linha_inicial <= 0 or linha_inicial >= tabela.rowCount():
+            return False
+
+        for numero_linha in range(linha_inicial, tabela.rowCount()):
+            item_este = tabela.item(numero_linha - 1, 1)
+            item_norte = tabela.item(numero_linha - 1, 2)
+            try:
+                este_ini = float(item_este.text().replace(',', '.'))
+                norte_ini = float(item_norte.text().replace(',', '.'))
+                graus = float(tabela.item(numero_linha, 3).text().replace(',', '.'))
+                minutos = float(tabela.item(numero_linha, 4).text().replace(',', '.'))
+                segundos = float(tabela.item(numero_linha, 5).text().replace(',', '.'))
+                distancia = float(tabela.item(numero_linha, 6).text().replace(',', '.'))
+            except (AttributeError, ValueError):
+                return False
+
+            azimute_decimal = self.calc_azimute_decimal(
+                graus, minutos, segundos
+            )
+            delta_este = self.calc_delta_este(azimute_decimal, distancia)
+            delta_norte = self.calc_delta_norte(azimute_decimal, distancia)
+            este_pos, norte_pos = self.calcula_coodenada_seguinte(
+                este_ini,
+                norte_ini,
+                delta_este,
+                delta_norte,
+            )
+            tabela.item(numero_linha, 1).setText(f'{este_pos:.6f}')
+            tabela.item(numero_linha, 2).setText(f'{norte_pos:.6f}')
+            tabela.item(numero_linha, 7).setText(f'{azimute_decimal:.6f}')
+            tabela.item(numero_linha, 8).setText(f'{delta_este:.6f}')
+            tabela.item(numero_linha, 9).setText(f'{delta_norte:.6f}')
+
+        return True
+
+    def remover_linha_azimute(self):
+        """Remove o segmento selecionado e recalcula os segmentos abaixo."""
+        if not hasattr(self, 'tbl_azimute'):
+            return
+
+        tabela = self.tbl_azimute
+        linha = tabela.currentRow()
+        if linha < 0:
+            return
+
+        if linha == 0:
+            self.remover_vertice_inicial_az()
+            return
+
+        tabela.removeRow(linha)
+        if tabela.rowCount() > linha:
+            self.recalcular_linhas_azimute(linha)
+        self.atualizar_estado_botoes_azimute()
+
+    def recalcular_tabela_azimute(self):
+        """Recalcula a linha selecionada e todas as linhas abaixo."""
+        if not hasattr(self, 'tbl_azimute'):
+            return
+
+        linha = self.tbl_azimute.currentRow()
+        if linha == 0:
+            linha = 1
+        if linha < self.tbl_azimute.rowCount():
+            self.recalcular_linhas_azimute(linha)
+
     def remover_vertice_inicial_az(self):
         """Remove a primeira linha da tabela e libera uma nova inserção."""
         if not hasattr(self, 'tbl_azimute'):
@@ -414,6 +514,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if hasattr(self, 'btn_remove_vert_ini_az'):
             self.btn_remove_vert_ini_az.setEnabled(False)
         self.configurar_campos_azimute(False)
+        self.atualizar_estado_botoes_azimute()
 
     def limpar_formulario(self):
         """Confirma e limpa campos, tabelas e arquivos selecionados."""
@@ -469,6 +570,8 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         self.atualizar_estado_btn_remove_ln_cor()
         if hasattr(self, 'btn_remove_ln_az'):
             self.btn_remove_ln_az.setEnabled(False)
+        if hasattr(self, 'btn_az_recal_tabela'):
+            self.btn_az_recal_tabela.setEnabled(False)
         self.configurar_campos_azimute(False)
         if hasattr(self, 'btn_add_vert_ini_az'):
             self.btn_add_vert_ini_az.setEnabled(True)

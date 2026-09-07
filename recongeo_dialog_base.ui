@@ -315,6 +315,9 @@
     </item>
     <item>
      <widget class="QPushButton" name="btn_limp_form">
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Limpa os campos do formulário.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(224, 27, 36);</string>
       </property>
@@ -633,7 +636,7 @@
        </font>
       </property>
       <property name="toolTip">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Remove a linha selecionada da tabela&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Selecione a linha na tabela e clique em remover.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(246, 97, 81);</string>
@@ -652,6 +655,9 @@
        <height>51</height>
       </rect>
      </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Selecione a linha a partir da qual deseja que os valores ejam recalculados na tabela.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(255, 190, 111);</string>
      </property>
@@ -667,6 +673,9 @@
        <width>81</width>
        <height>51</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adiciona as coordenadas de partida do memorial à tabela.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(205, 171, 143);</string>
@@ -684,6 +693,9 @@
        <width>81</width>
        <height>51</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Remove as coordenadas de partida da tabela para inserção de uma coordenada corrigida.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(205, 171, 143);</string>
