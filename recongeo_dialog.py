@@ -196,6 +196,8 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                 self.atualizar_estado_botoes_azimute
             )
 
+        self.atualizar_estado_abas_tabelas()
+
         # Configura os validadores float e int nos QLineEdit especificados
         self.configurar_validadores()
 
@@ -208,9 +210,36 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             )
             self.btn_remove_ln_cor.setEnabled(linha_selecionada)
 
+    def atualizar_estado_abas_tabelas(self):
+        """Desabilita a aba oposta à tabela que já possui dados."""
+        if not hasattr(self, 'tabWidget'):
+            return
+
+        coordenadas_preenchidas = (
+            hasattr(self, 'tbl_coordenanda')
+            and self.tbl_coordenanda.rowCount() > 0
+        )
+        azimute_preenchido = (
+            hasattr(self, 'tbl_azimute')
+            and self.tbl_azimute.rowCount() > 0
+        )
+        indice_azimute = self.tabWidget.indexOf(self.azimute)
+        indice_coordenada = self.tabWidget.indexOf(self.coordenada)
+
+        if coordenadas_preenchidas:
+            self.tabWidget.setTabEnabled(indice_azimute, False)
+        elif azimute_preenchido:
+            self.tabWidget.setTabEnabled(indice_coordenada, False)
+        else:
+            self.tabWidget.setTabEnabled(indice_azimute, True)
+            self.tabWidget.setTabEnabled(indice_coordenada, True)
+
     def remover_linha_coordenada(self):
         """Remove da tabela de coordenadas a linha selecionada."""
         if not hasattr(self, 'tbl_coordenanda'):
+            return
+        if (hasattr(self, 'tbl_azimute')
+                and self.tbl_azimute.rowCount() > 0):
             return
 
         tabela = self.tbl_coordenanda
@@ -220,6 +249,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
 
         tabela.removeRow(linha)
         self.atualizar_estado_btn_remove_ln_cor()
+        self.atualizar_estado_abas_tabelas()
 
     def atualizar_estado_botoes_azimute(self):
         """Atualiza os botões conforme a seleção de segmentos."""
@@ -250,6 +280,9 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
     def adicionar_vertice_inicial_az(self):
         """Insere o vértice inicial como primeira linha da tabela de azimute."""
         if self.vertice_ini_valor is not None:
+            return
+        if (hasattr(self, 'tbl_coordenanda')
+                and self.tbl_coordenanda.rowCount() > 0):
             return
 
         campos = ['vertice_ini', 'coord_este_ini', 'coord_norte_ini']
@@ -303,6 +336,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if hasattr(self, 'btn_remove_vert_ini_az'):
             self.btn_remove_vert_ini_az.setEnabled(True)
         self.configurar_campos_azimute(True)
+        self.atualizar_estado_abas_tabelas()
 
     def calc_azimute_decimal(self, graus, minutos, segundos):
         """Converte graus, minutos e segundos para graus decimais."""
@@ -326,6 +360,9 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
     def adicionar_linha_azimute(self):
         """Calcula e adiciona a próxima linha na tabela de azimute."""
         if not hasattr(self, 'tbl_azimute'):
+            return
+        if (hasattr(self, 'tbl_coordenanda')
+                and self.tbl_coordenanda.rowCount() > 0):
             return
 
         campos = [
@@ -427,6 +464,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         for nome_campo in campos:
             getattr(self, nome_campo).clear()
         self.graus.setFocus()
+        self.atualizar_estado_abas_tabelas()
 
     def recalcular_linhas_azimute(self, linha_inicial):
         """Recalcula uma linha e todas as linhas seguintes da tabela."""
@@ -484,6 +522,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if tabela.rowCount() > linha:
             self.recalcular_linhas_azimute(linha)
         self.atualizar_estado_botoes_azimute()
+        self.atualizar_estado_abas_tabelas()
 
     def recalcular_tabela_azimute(self):
         """Recalcula a linha selecionada e todas as linhas abaixo."""
@@ -515,6 +554,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             self.btn_remove_vert_ini_az.setEnabled(False)
         self.configurar_campos_azimute(False)
         self.atualizar_estado_botoes_azimute()
+        self.atualizar_estado_abas_tabelas()
 
     def limpar_formulario(self):
         """Confirma e limpa campos, tabelas e arquivos selecionados."""
@@ -577,6 +617,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             self.btn_add_vert_ini_az.setEnabled(True)
         if hasattr(self, 'btn_remove_vert_ini_az'):
             self.btn_remove_vert_ini_az.setEnabled(False)
+        self.atualizar_estado_abas_tabelas()
 
     def configurar_validadores(self):
         """Aplica validação float e int com restrições apropriadas aos QLineEdit."""
@@ -635,6 +676,9 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
 
         if not hasattr(self, 'tbl_coordenanda'):
             return
+        if (hasattr(self, 'tbl_azimute')
+                and self.tbl_azimute.rowCount() > 0):
+            return
 
         # Adiciona nova linha ao final da tabela
         tabela = self.tbl_coordenanda
@@ -659,13 +703,25 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         # Retorna o foco para o campo 'vertice_cor'
         if hasattr(self, 'vertice_cor'):
             self.vertice_cor.setFocus()
+        self.atualizar_estado_abas_tabelas()
 
     def criar_camadas_coordenadas(self):
-        """Cria camadas temporárias de pontos e polígono a partir da tabela."""
-        if not hasattr(self, 'tbl_coordenanda'):
+        """Cria pontos, linhas e polígono com a tabela preenchida."""
+        usa_azimute = (
+            hasattr(self, 'tbl_azimute')
+            and self.tbl_azimute.rowCount() > 0
+        )
+        if usa_azimute:
+            tabela = self.tbl_azimute
+            numero_colunas = 12
+            confrontante_coluna = 10
+        elif hasattr(self, 'tbl_coordenanda'):
+            tabela = self.tbl_coordenanda
+            numero_colunas = 5
+            confrontante_coluna = 3
+        else:
             return None
 
-        tabela = self.tbl_coordenanda
         sistema_coordenadas = QgsCoordinateReferenceSystem('EPSG:4674')
         if hasattr(self, 'mQgsProjectionSelectionWidget'):
             sistema_selecionado = self.mQgsProjectionSelectionWidget.crs()
@@ -692,7 +748,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             atributos.append([
                 tabela.item(numero_linha, coluna).text().strip()
                 if tabela.item(numero_linha, coluna) else ''
-                for coluna in range(5)
+                for coluna in range(numero_colunas)
             ])
 
         if len(pontos) < 3:
@@ -711,12 +767,31 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             f'{nome_base}_pto',
             'memory'
         )
+        if usa_azimute:
+            campos_pontos = [
+                ('vertice', QVariant.String),
+                ('este', QVariant.Double),
+                ('norte', QVariant.Double),
+                ('graus', QVariant.Double),
+                ('minutos', QVariant.Double),
+                ('segundos', QVariant.Double),
+                ('distancia', QVariant.Double),
+                ('azimute_decimal', QVariant.Double),
+                ('delta_este', QVariant.Double),
+                ('delta_norte', QVariant.Double),
+                ('confrontante', QVariant.String),
+                ('num_lote', QVariant.String),
+            ]
+        else:
+            campos_pontos = [
+                ('vertice', QVariant.String),
+                ('este', QVariant.Double),
+                ('norte', QVariant.Double),
+                ('confrontante', QVariant.String),
+                ('lote_vizinho', QVariant.String),
+            ]
         camada_pontos.dataProvider().addAttributes([
-            QgsField('vertice', QVariant.String),
-            QgsField('este', QVariant.Double),
-            QgsField('norte', QVariant.Double),
-            QgsField('confrontante', QVariant.String),
-            QgsField('lote_vizinho', QVariant.String),
+            QgsField(nome, tipo) for nome, tipo in campos_pontos
         ])
         camada_pontos.updateFields()
 
@@ -724,13 +799,21 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         for ponto, valores in zip(pontos, atributos):
             feicao_ponto = QgsFeature(camada_pontos.fields())
             feicao_ponto.setGeometry(QgsGeometry.fromPointXY(ponto))
-            feicao_ponto.setAttributes([
+            atributos_ponto = [
                 valores[0],
                 float(valores[1].replace(',', '.')),
                 float(valores[2].replace(',', '.')),
-                valores[3],
-                valores[4],
-            ])
+            ]
+            if usa_azimute:
+                atributos_ponto.extend([
+                    float(valores[coluna].replace(',', '.'))
+                    if valores[coluna] else None
+                    for coluna in range(3, 10)
+                ])
+                atributos_ponto.extend([valores[10], valores[11]])
+            else:
+                atributos_ponto.extend([valores[3], valores[4]])
+            feicao_ponto.setAttributes(atributos_ponto)
             feicoes_pontos.append(feicao_ponto)
         camada_pontos.dataProvider().addFeatures(feicoes_pontos)
 
@@ -814,7 +897,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                 indice + 1,
                 valores_iniciais[0],
                 valores_finais[0],
-                valores_finais[3],
+                valores_finais[confrontante_coluna],
             ])
             feicoes_linhas.append(feicao_linha)
         camada_linhas.dataProvider().addFeatures(feicoes_linhas)
@@ -1198,6 +1281,8 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                         coluna,
                         QtWidgets.QTableWidgetItem(str(valor)),
                     )
+
+        self.atualizar_estado_abas_tabelas()
 
         # Atualiza o sistema de coordenadas salvo no arquivo
         crs_authid = dados_src.get("crs_authid", "EPSG:4674")
