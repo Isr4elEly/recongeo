@@ -1178,6 +1178,23 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                     raise RuntimeError(mensagem)
 
             camadas_finais = []
+            estilos = {
+                '_pto': os.path.join(
+                    os.path.dirname(__file__),
+                    'estilos',
+                    'pto_estilo.qml',
+                ),
+                '_pol': os.path.join(
+                    os.path.dirname(__file__),
+                    'estilos',
+                    'pol_estilo.qml',
+                ),
+                '_lna': os.path.join(
+                    os.path.dirname(__file__),
+                    'estilos',
+                    'lna_estilo.qml',
+                ),
+            }
             for camada in camadas:
                 caminho_camada = (
                     f'{caminho_gpkg}|layername={camada.name()}'
@@ -1191,6 +1208,35 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                     raise RuntimeError(
                         f'Não foi possível carregar a camada {camada.name()}.'
                     )
+
+                caminho_estilo = next(
+                    (caminho for sufixo, caminho in estilos.items()
+                     if camada.name().endswith(sufixo)),
+                    None,
+                )
+                if caminho_estilo is None or not os.path.isfile(caminho_estilo):
+                    raise RuntimeError(
+                        f'Estilo QML não encontrado para {camada.name()}.'
+                    )
+                resultado_estilo = camada_final.loadNamedStyle(caminho_estilo)
+                if isinstance(resultado_estilo, tuple):
+                    indicadores = [
+                        valor for valor in resultado_estilo
+                        if isinstance(valor, bool)
+                    ]
+                    estilo_carregado = (
+                        indicadores[-1] if indicadores else True
+                    )
+                else:
+                    estilo_carregado = (
+                        resultado_estilo is None
+                        or resultado_estilo is True
+                    )
+                if not estilo_carregado:
+                    raise RuntimeError(
+                        f'Não foi possível aplicar o estilo a {camada.name()}.'
+                    )
+                camada_final.triggerRepaint()
                 camadas_finais.append(camada_final)
 
             QgsProject.instance().addMapLayers(camadas_finais)

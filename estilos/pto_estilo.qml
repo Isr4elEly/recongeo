@@ -327,6 +327,13 @@
       <column type="field" name="este" hidden="0" width="112"/>
       <column type="field" name="norte" hidden="0" width="132"/>
       <column type="field" name="confrontante" hidden="0" width="-1"/>
+      <column type="field" name="graus" hidden="0" width="-1"/>
+      <column type="field" name="minutos" hidden="0" width="-1"/>
+      <column type="field" name="segundos" hidden="0" width="-1"/>
+      <column type="field" name="distancia" hidden="0" width="-1"/>
+      <column type="field" name="azimute_decimal" hidden="0" width="-1"/>
+      <column type="field" name="delta_este" hidden="0" width="-1"/>
+      <column type="field" name="delta_norte" hidden="0" width="-1"/>
       <column type="actions" hidden="1" width="-1"/>
     </columns>
   </attributetableconfig>

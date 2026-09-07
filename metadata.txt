@@ -1,11 +1,11 @@
 [general]
 name=ReconGeo
 qgisMinimumVersion=3.0
-description=Plugin ReconGeo para QGIS com interface Qt5 editável via Qt Designer
-version=0.1
-author=Desenvolvedor
-email=contato@exemplo.com
-about=Plugin desenvolvido para QGIS 3 com interface PyQt5 editável diretamente no Qt Designer sem necessidade de compilação intermediária.
+description=Plugin desenvolvido para QGIS 3.x para reconstiruir vetores de processos titulatórios antidos do INCRA.
+version=1.0
+author=Israel Oliveira
+email=israelely76@gmail.com
+about=Plugin desenvolvido para QGIS 3.x para reconstiruir vetores de processos titulatórios antidos do INCRA.
 tracker=
 repository=
 category=Plugins
