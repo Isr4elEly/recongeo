@@ -116,3 +116,5 @@ inclua na função do btn_add_ln_az a limpesa dos campos [graus, minutos, segund
 modifique o botão "btn_remove_ln_az" para iniciar desabilitado, ficando habilitado quando uma linha da "tbl_azimute" for selecionada, voltando a ficar desabilitado se a seleção for removida. Ao ser clicado, o "btn_remove_ln_az" deve apagar a linha selecionada e recalcular a linhas abaixo conforme descrito para os cálculos do "btn_add_ln_az" sem haver adição de nova linha na tabela.
 
 seguindo a mesma lógica, o "btn_az_recal_tabela" deve ficar desabilitado, sendo habilitado com a seleção de uma linha da tabela, e aplicar o recalculo a linhas abaixo conforme descrito para os cálculos do "btn_add_ln_az" sem haver adição de nova linha na tabela.
+
+com base na função que gera os arquivos temporários de ponto, linha e polígono, modifique para que possa gerar também com as informações da tabela "tbl_azimute" sendo que não poderá ser preenchido as duas tabelas ao mesmo tempo. Quando uma começar a ser alimentada a outra aba deve ser desabilitada.

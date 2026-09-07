@@ -270,7 +270,6 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             'graus',
             'minutos',
             'segundos',
-            'num_lote_az',
             'vertice_az',
         ]
         for nome_campo in campos:
@@ -372,7 +371,6 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             'distancia',
             'vertice_az',
             'confrontante_az',
-            'num_lote_az',
         ]
         valores = {}
         for nome_campo in campos:
@@ -452,7 +450,6 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             f'{delta_este:.6f}',
             f'{delta_norte:.6f}',
             valores['confrontante_az'],
-            valores['num_lote_az'],
         ]
         for coluna, valor in enumerate(valores_linha):
             tabela.setItem(
@@ -654,7 +651,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
 
     def adicionar_linha_coordenada(self):
         """Coleta os valores dos campos de coordenada do painel de entrada
-        [vertice_cor, este_cor, norte_cor, confrontante_cor, lote_vizinho_cor],
+        [vertice_cor, este_cor, norte_cor, confrontante_cor],
         insere uma nova linha na tabela 'tbl_coordenanda' com os dados na ordem fornecida,
         limpa os campos de entrada e retorna o foco para o campo 'vertice_cor'.
 
@@ -663,7 +660,6 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             1 → Este         → este_cor
             2 → Norte        → norte_cor
             3 → Confrontante → confrontante_cor
-            4 → Lote Vizinho → lote_vizinho_cor
         """
         from qgis.PyQt.QtWidgets import QTableWidgetItem
 
@@ -672,7 +668,6 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         este = self.este_cor.text().strip() if hasattr(self, 'este_cor') else ""
         norte = self.norte_cor.text().strip() if hasattr(self, 'norte_cor') else ""
         confrontante = self.confrontante_cor.text().strip() if hasattr(self, 'confrontante_cor') else ""
-        lote_vizinho = self.lote_vizinho_cor.text().strip() if hasattr(self, 'lote_vizinho_cor') else ""
 
         if not hasattr(self, 'tbl_coordenanda'):
             return
@@ -690,13 +685,12 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         tabela.setItem(nova_linha, 1, QTableWidgetItem(este))
         tabela.setItem(nova_linha, 2, QTableWidgetItem(norte))
         tabela.setItem(nova_linha, 3, QTableWidgetItem(confrontante))
-        tabela.setItem(nova_linha, 4, QTableWidgetItem(lote_vizinho))
 
         # Rola a tabela até a linha recém-adicionada
         tabela.scrollToItem(tabela.item(nova_linha, 0))
 
         # Limpa os campos de entrada
-        for campo in ['vertice_cor', 'este_cor', 'norte_cor', 'confrontante_cor', 'lote_vizinho_cor']:
+        for campo in ['vertice_cor', 'este_cor', 'norte_cor', 'confrontante_cor']:
             if hasattr(self, campo):
                 getattr(self, campo).clear()
 
@@ -713,7 +707,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         )
         if usa_azimute:
             tabela = self.tbl_azimute
-            numero_colunas = 12
+            numero_colunas = 11
             confrontante_coluna = 10
         elif hasattr(self, 'tbl_coordenanda'):
             tabela = self.tbl_coordenanda
@@ -780,7 +774,6 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                 ('delta_este', QVariant.Double),
                 ('delta_norte', QVariant.Double),
                 ('confrontante', QVariant.String),
-                ('num_lote', QVariant.String),
             ]
         else:
             campos_pontos = [
@@ -788,7 +781,6 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                 ('este', QVariant.Double),
                 ('norte', QVariant.Double),
                 ('confrontante', QVariant.String),
-                ('lote_vizinho', QVariant.String),
             ]
         camada_pontos.dataProvider().addAttributes([
             QgsField(nome, tipo) for nome, tipo in campos_pontos
@@ -810,9 +802,9 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                     if valores[coluna] else None
                     for coluna in range(3, 10)
                 ])
-                atributos_ponto.extend([valores[10], valores[11]])
+                atributos_ponto.append(valores[10])
             else:
-                atributos_ponto.extend([valores[3], valores[4]])
+                atributos_ponto.append(valores[3])
             feicao_ponto.setAttributes(atributos_ponto)
             feicoes_pontos.append(feicao_ponto)
         camada_pontos.dataProvider().addFeatures(feicoes_pontos)
@@ -1126,6 +1118,21 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                         )
                         f.write(f"linha_{numero_linha + 1} = {registro}\n")
 
+                if hasattr(self, "tbl_azimute"):
+                    f.write("\n[TABELA_AZIMUTE]\n")
+                    tabela = self.tbl_azimute
+                    for numero_linha in range(tabela.rowCount()):
+                        valores_linha = [
+                            tabela.item(numero_linha, coluna).text()
+                            if tabela.item(numero_linha, coluna) else ""
+                            for coluna in range(tabela.columnCount())
+                        ]
+                        registro = json.dumps(
+                            valores_linha,
+                            ensure_ascii=False,
+                        )
+                        f.write(f"linha_{numero_linha + 1} = {registro}\n")
+
             mensagem_sucesso = f"Dados salvos com sucesso!\n\nArquivo TXT: {caminho_arquivo}"
             if pdf_cop and caminho_pdf_copiado:
                 mensagem_sucesso += f"\nCópia do PDF: {caminho_pdf_copiado}"
@@ -1159,7 +1166,9 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         dados_titulo = {}
         dados_src = {}
         dados_coordenadas = []
+        dados_azimute = []
         tem_secao_coordenadas = False
+        tem_secao_azimute = False
         aba_importada = None
         secao_atual = None
         chave_atual = None
@@ -1176,12 +1185,18 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                         if secao_atual == "TABELA_COORDENADAS":
                             tem_secao_coordenadas = True
                             aba_importada = "coordenada"
-                        elif secao_atual == "AZIMUTE":
+                        elif secao_atual == "TABELA_AZIMUTE":
+                            tem_secao_azimute = True
                             aba_importada = "azimute"
                         chave_atual = None
                         continue
 
-                    if secao_atual in ["TITULO", "SRC", "TABELA_COORDENADAS"]:
+                    if secao_atual in [
+                        "TITULO",
+                        "SRC",
+                        "TABELA_COORDENADAS",
+                        "TABELA_AZIMUTE",
+                    ]:
                         if "=" in linha:
                             chave, valor = linha.split("=", 1)
                             chave_atual = chave.strip()
@@ -1189,6 +1204,8 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                                 dados_titulo[chave_atual] = valor.strip()
                             elif secao_atual == "SRC":
                                 dados_src[chave_atual] = valor.strip()
+                            elif secao_atual == "TABELA_AZIMUTE":
+                                dados_azimute.append(valor.strip())
                             else:
                                 dados_coordenadas.append(valor.strip())
                         elif chave_atual == "obs":
@@ -1281,6 +1298,52 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                         coluna,
                         QtWidgets.QTableWidgetItem(str(valor)),
                     )
+
+        # Reconstrói a tabela de azimute importada
+        if tem_secao_azimute and hasattr(self, "tbl_azimute"):
+            tabela = self.tbl_azimute
+            tabela.setRowCount(0)
+            for registro in dados_azimute:
+                try:
+                    valores_linha = json.loads(registro)
+                except json.JSONDecodeError:
+                    continue
+
+                if not isinstance(valores_linha, list):
+                    continue
+
+                numero_linha = tabela.rowCount()
+                tabela.insertRow(numero_linha)
+                for coluna in range(tabela.columnCount()):
+                    valor = (
+                        valores_linha[coluna]
+                        if coluna < len(valores_linha)
+                        else ""
+                    )
+                    tabela.setItem(
+                        numero_linha,
+                        coluna,
+                        QtWidgets.QTableWidgetItem(str(valor)),
+                    )
+
+            if tabela.rowCount() > 0:
+                item_vertice = tabela.item(0, 0)
+                item_este = tabela.item(0, 1)
+                item_norte = tabela.item(0, 2)
+                self.vertice_ini_valor = (
+                    item_vertice.text() if item_vertice else ""
+                )
+                self.coord_este_ini_valor = (
+                    item_este.text() if item_este else ""
+                )
+                self.coord_norte_ini_valor = (
+                    item_norte.text() if item_norte else ""
+                )
+                self.configurar_campos_azimute(True)
+                if hasattr(self, "btn_add_vert_ini_az"):
+                    self.btn_add_vert_ini_az.setEnabled(False)
+                if hasattr(self, "btn_remove_vert_ini_az"):
+                    self.btn_remove_vert_ini_az.setEnabled(True)
 
         self.atualizar_estado_abas_tabelas()
 

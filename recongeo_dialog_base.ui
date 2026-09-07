@@ -408,11 +408,6 @@
        <string>Confrontante</string>
       </property>
      </column>
-     <column>
-      <property name="text">
-       <string>Lote Vizinho</string>
-      </property>
-     </column>
     </widget>
     <widget class="QLineEdit" name="vertice_ini">
      <property name="geometry">
@@ -579,22 +574,6 @@
        <string>Confrontante</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="num_lote_az">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>190</y>
-        <width>211</width>
-        <height>28</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 190, 111);</string>
-      </property>
-      <property name="placeholderText">
-       <string>Número do lote</string>
-      </property>
-     </widget>
      <widget class="QPushButton" name="btn_add_ln_az">
       <property name="geometry">
        <rect>
@@ -739,11 +718,6 @@
        <string>Confrontante</string>
       </property>
      </column>
-     <column>
-      <property name="text">
-       <string>Lote Vizinho</string>
-      </property>
-     </column>
     </widget>
     <widget class="QFrame" name="frame_3">
      <property name="geometry">
@@ -877,22 +851,6 @@
        <string>+</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lote_vizinho_cor">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>130</y>
-        <width>241</width>
-        <height>28</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 190, 111);</string>
-      </property>
-      <property name="placeholderText">
-       <string>Lote Vizinho</string>
-      </property>
-     </widget>
     </widget>
    </widget>
   </widget>
@@ -979,7 +937,6 @@
   <tabstop>este_cor</tabstop>
   <tabstop>norte_cor</tabstop>
   <tabstop>confrontante_cor</tabstop>
-  <tabstop>lote_vizinho_cor</tabstop>
   <tabstop>btn_salvar</tabstop>
   <tabstop>tbl_azimute</tabstop>
   <tabstop>vertice_ini</tabstop>
@@ -991,7 +948,6 @@
   <tabstop>distancia</tabstop>
   <tabstop>vertice_az</tabstop>
   <tabstop>confrontante_az</tabstop>
-  <tabstop>num_lote_az</tabstop>
   <tabstop>btn_add_ln_az</tabstop>
   <tabstop>btn_remove_ln_az</tabstop>
   <tabstop>btn_az_recal_tabela</tabstop>
