@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1331</width>
-    <height>816</height>
+    <width>1050</width>
+    <height>844</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QFrame" name="frm_info">
    <property name="geometry">
     <rect>
-     <x>510</x>
+     <x>470</x>
      <y>10</y>
-     <width>801</width>
+     <width>571</width>
      <height>391</height>
     </rect>
    </property>
@@ -31,11 +31,16 @@
    <widget class="QFrame" name="frame_4">
     <property name="geometry">
      <rect>
-      <x>430</x>
+      <x>290</x>
       <y>10</y>
-      <width>361</width>
+      <width>271</width>
       <height>184</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -46,33 +51,66 @@
     <layout class="QFormLayout" name="formLayout">
      <item row="0" column="0">
       <widget class="QLabel" name="lbl_nome_lote">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Nome do Lote</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="nome_lote"/>
+      <widget class="QLineEdit" name="nome_lote">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="lbl_titulado">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Titulado</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="titulado"/>
+      <widget class="QLineEdit" name="titulado">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="lbl_area">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Àrea (ha)</string>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QLineEdit" name="area"/>
+      <widget class="QLineEdit" name="area">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="lbl_uf">
@@ -82,17 +120,34 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QLineEdit" name="uf"/>
+      <widget class="QLineEdit" name="uf">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="lbl_municipio">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Município</string>
        </property>
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QLineEdit" name="municipio"/>
+      <widget class="QLineEdit" name="municipio">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -101,7 +156,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>411</width>
+      <width>271</width>
       <height>185</height>
      </rect>
     </property>
@@ -114,53 +169,110 @@
     <layout class="QFormLayout" name="formLayout_2">
      <item row="0" column="0">
       <widget class="QLabel" name="lbl_processo">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Nº do Processo</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="processo"/>
+      <widget class="QLineEdit" name="processo">
+       <property name="font">
+        <font>
+         <family>Sans</family>
+         <pointsize>10</pointsize>
+         <italic>true</italic>
+        </font>
+       </property>
+      </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="lbl_gleba">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Nome da Gleba</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="gleba"/>
+      <widget class="QLineEdit" name="gleba">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="lbl_num_titulo">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Nº do Título</string>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QLineEdit" name="num_titulo"/>
+      <widget class="QLineEdit" name="num_titulo">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="lbl_num_lote">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Nº do Lote</string>
        </property>
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QLineEdit" name="num_lote"/>
+      <widget class="QLineEdit" name="num_lote">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="lbl_data_titulo">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Data do Título</string>
        </property>
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="QDateEdit" name="data_titulo"/>
+      <widget class="QDateEdit" name="data_titulo">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -169,7 +281,7 @@
      <rect>
       <x>10</x>
       <y>196</y>
-      <width>781</width>
+      <width>551</width>
       <height>181</height>
      </rect>
     </property>
@@ -181,13 +293,30 @@
     </property>
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="1">
-      <widget class="QDateEdit" name="data_analise"/>
+      <widget class="QDateEdit" name="data_analise">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item row="1" column="1" colspan="3">
-      <widget class="QTextEdit" name="obs"/>
+      <widget class="QTextEdit" name="obs">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="lbl_obs">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Observações</string>
        </property>
@@ -195,6 +324,11 @@
      </item>
      <item row="0" column="3">
       <widget class="QComboBox" name="planilha_status">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="toolTip">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Informe se o memorial descritivo pode gerar uma planilha &amp;quot;&lt;span style=&quot; font-weight:600;&quot;&gt;conforme&lt;/span&gt;&amp;quot;, &amp;quot;&lt;span style=&quot; font-weight:600;&quot;&gt;incompleta&lt;/span&gt;&amp;quot; ou não houve informações suficientes para gerar a planilha de coordenadas &amp;quot;&lt;span style=&quot; font-weight:600;&quot;&gt;não conforme&lt;/span&gt;&amp;quot;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
@@ -217,6 +351,11 @@
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="lbl_data_analise">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Data da Análise</string>
        </property>
@@ -224,6 +363,11 @@
      </item>
      <item row="0" column="2">
       <widget class="QCheckBox" name="chkbox_sigef">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Cadastro SIGEF</string>
        </property>
@@ -237,7 +381,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>191</width>
+     <width>171</width>
      <height>251</height>
     </rect>
    </property>
@@ -250,6 +394,11 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QPushButton" name="btn_abrir_pdf">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Abre o arquivo PDF com as informações do processo de titulação.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
@@ -263,6 +412,11 @@
     </item>
     <item>
      <widget class="QPushButton" name="btn_salvar">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Salva os dados digitados em arquivo do plugin.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
@@ -279,6 +433,11 @@
     </item>
     <item>
      <widget class="QPushButton" name="btn_abrir">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Importa um arquivo txt gerado pelo plugin.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
@@ -292,6 +451,11 @@
     </item>
     <item>
      <widget class="QPushButton" name="btn_vetor_temp">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gera vetores temporários no QGIS para a conferência do memorial.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
@@ -305,6 +469,11 @@
     </item>
     <item>
      <widget class="QPushButton" name="btn_dados_finais">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gera os arquivos finais da reconstituição.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
@@ -318,6 +487,11 @@
     </item>
     <item>
      <widget class="QPushButton" name="btn_limp_form">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Limpa os campos do formulário.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
@@ -336,9 +510,14 @@
     <rect>
      <x>10</x>
      <y>390</y>
-     <width>1301</width>
-     <height>421</height>
+     <width>1031</width>
+     <height>441</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="currentIndex">
     <number>0</number>
@@ -350,10 +529,10 @@
     <widget class="QTableWidget" name="tbl_azimute">
      <property name="geometry">
       <rect>
-       <x>335</x>
+       <x>300</x>
        <y>10</y>
-       <width>951</width>
-       <height>341</height>
+       <width>721</width>
+       <height>391</height>
       </rect>
      </property>
      <column>
@@ -411,70 +590,14 @@
        <string>Confrontante</string>
       </property>
      </column>
-     <column>
-      <property name="text">
-       <string>Lote Vizinho</string>
-      </property>
-     </column>
-    </widget>
-    <widget class="QLineEdit" name="vertice_ini">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>231</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Nome do vértice de partida&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(205, 171, 143);</string>
-     </property>
-     <property name="placeholderText">
-      <string>Vértice de Partida</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="coord_este_ini">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>231</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(205, 171, 143);</string>
-     </property>
-     <property name="placeholderText">
-      <string>Coordenada Este</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="coord_norte_ini">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>231</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(205, 171, 143);</string>
-     </property>
-     <property name="placeholderText">
-      <string>Coordenada Norte</string>
-     </property>
     </widget>
     <widget class="QFrame" name="frame_2">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>130</y>
-       <width>231</width>
-       <height>251</height>
+       <y>180</y>
+       <width>171</width>
+       <height>221</height>
       </rect>
      </property>
      <property name="frameShape">
@@ -488,9 +611,14 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>211</width>
+        <width>151</width>
         <height>28</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="toolTip">
        <string/>
@@ -499,7 +627,7 @@
        <string notr="true">background-color: rgb(255, 190, 111);</string>
       </property>
       <property name="placeholderText">
-       <string>Graus</string>
+       <string>Digite os Graus</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="minutos">
@@ -507,15 +635,20 @@
        <rect>
         <x>10</x>
         <y>40</y>
-        <width>211</width>
+        <width>151</width>
         <height>28</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 190, 111);</string>
       </property>
       <property name="placeholderText">
-       <string>Minutos</string>
+       <string>Digite os Minutos</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="segundos">
@@ -523,15 +656,20 @@
        <rect>
         <x>10</x>
         <y>70</y>
-        <width>211</width>
+        <width>151</width>
         <height>28</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 190, 111);</string>
       </property>
       <property name="placeholderText">
-       <string>Segundos</string>
+       <string>Digite os Segundos</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="distancia">
@@ -539,15 +677,20 @@
        <rect>
         <x>10</x>
         <y>100</y>
-        <width>211</width>
+        <width>151</width>
         <height>28</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 190, 111);</string>
       </property>
       <property name="placeholderText">
-       <string>Distância</string>
+       <string>Digite a Distância</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="vertice_az">
@@ -555,15 +698,20 @@
        <rect>
         <x>10</x>
         <y>130</y>
-        <width>211</width>
+        <width>151</width>
         <height>28</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 190, 111);</string>
       </property>
       <property name="placeholderText">
-       <string>Vértice</string>
+       <string>Digite o Vértice</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="confrontante_az">
@@ -571,92 +719,36 @@
        <rect>
         <x>10</x>
         <y>160</y>
-        <width>211</width>
-        <height>28</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 190, 111);</string>
-      </property>
-      <property name="placeholderText">
-       <string>Confrontante</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="num_lote_az">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>190</y>
-        <width>211</width>
-        <height>28</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 190, 111);</string>
-      </property>
-      <property name="placeholderText">
-       <string>Número do lote</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="btn_add_ln_az">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>220</y>
-        <width>93</width>
+        <width>151</width>
         <height>28</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <weight>75</weight>
-        <bold>true</bold>
+        <pointsize>10</pointsize>
        </font>
       </property>
-      <property name="toolTip">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adiciona os dados à tabela&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(153, 193, 241);</string>
+       <string notr="true">background-color: rgb(255, 190, 111);</string>
       </property>
-      <property name="text">
-       <string>+</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="btn_remove_ln_az">
-      <property name="geometry">
-       <rect>
-        <x>130</x>
-        <y>220</y>
-        <width>93</width>
-        <height>28</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Selecione a linha na tabela e clique em remover.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(246, 97, 81);</string>
-      </property>
-      <property name="text">
-       <string>-</string>
+      <property name="placeholderText">
+       <string>Digite o Confrontante</string>
       </property>
      </widget>
     </widget>
     <widget class="QPushButton" name="btn_az_recal_tabela">
      <property name="geometry">
       <rect>
-       <x>250</x>
-       <y>207</y>
+       <x>200</x>
+       <y>290</y>
        <width>81</width>
        <height>51</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
      <property name="toolTip">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Selecione a linha a partir da qual deseja que os valores ejam recalculados na tabela.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -668,44 +760,203 @@
       <string>recalc</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="btn_add_vert_ini_az">
+    <widget class="QGroupBox" name="groupBox">
      <property name="geometry">
       <rect>
-       <x>250</x>
+       <x>10</x>
        <y>10</y>
-       <width>81</width>
-       <height>51</height>
+       <width>281</width>
+       <height>161</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adiciona as coordenadas de partida do memorial à tabela.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Digite as informações nos campos e clique no botão &lt;span style=&quot; font-weight:600;&quot;&gt;Adicionar Partida&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(205, 171, 143);</string>
+      <string notr="true">background-color: rgb(192, 191, 188);</string>
+     </property>
+     <property name="title">
+      <string>Informe o Ponto de Partida do memorial.</string>
+     </property>
+     <widget class="QLineEdit" name="vertice_ini">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>171</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Nome do &lt;span style=&quot; font-weight:600;&quot;&gt;vértice&lt;/span&gt; de partida&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(205, 171, 143);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Digite o Vértice de Partida</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="coord_este_ini">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>171</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Digite a coordenada de partida &lt;span style=&quot; font-weight:600;&quot;&gt;Este&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(205, 171, 143);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Digite a Coordenada Este</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="coord_norte_ini">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>120</y>
+        <width>171</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Digite a coordenada de partida &lt;span style=&quot; font-weight:600;&quot;&gt;Norte&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(205, 171, 143);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Digite a Coordenada Norte</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_add_vert_ini_az">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>30</y>
+        <width>81</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adiciona as coordenadas de partida do memorial à tabela.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(205, 171, 143);</string>
+      </property>
+      <property name="text">
+       <string>Adicionar 
+ Partida</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_remove_vert_ini_az">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>100</y>
+        <width>81</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Remove as coordenadas de partida da tabela para inserção de uma coordenada corrigida.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(205, 171, 143);</string>
+      </property>
+      <property name="text">
+       <string>Remover 
+ Partida</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QPushButton" name="btn_add_ln_az">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>210</y>
+       <width>81</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adiciona os dados à tabela&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(153, 193, 241);</string>
      </property>
      <property name="text">
-      <string>Adicionar 
- Partida</string>
+      <string>+</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="btn_remove_vert_ini_az">
+    <widget class="QPushButton" name="btn_remove_ln_az">
      <property name="geometry">
       <rect>
-       <x>250</x>
-       <y>70</y>
+       <x>200</x>
+       <y>250</y>
        <width>81</width>
-       <height>51</height>
+       <height>28</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Remove as coordenadas de partida da tabela para inserção de uma coordenada corrigida.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Selecione a linha na tabela e clique em remover.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(205, 171, 143);</string>
+      <string notr="true">background-color: rgb(246, 97, 81);</string>
      </property>
      <property name="text">
-      <string>Remover 
- Partida</string>
+      <string>-</string>
      </property>
     </widget>
    </widget>
@@ -716,9 +967,9 @@
     <widget class="QTableWidget" name="tbl_coordenanda">
      <property name="geometry">
       <rect>
-       <x>295</x>
+       <x>270</x>
        <y>10</y>
-       <width>991</width>
+       <width>751</width>
        <height>331</height>
       </rect>
      </property>
@@ -742,18 +993,13 @@
        <string>Confrontante</string>
       </property>
      </column>
-     <column>
-      <property name="text">
-       <string>Lote Vizinho</string>
-      </property>
-     </column>
     </widget>
     <widget class="QFrame" name="frame_3">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>271</width>
+       <width>251</width>
        <height>331</height>
       </rect>
      </property>
@@ -768,15 +1014,20 @@
        <rect>
         <x>10</x>
         <y>100</y>
-        <width>241</width>
+        <width>211</width>
         <height>28</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 190, 111);</string>
       </property>
       <property name="placeholderText">
-       <string>Confrontante</string>
+       <string>Digite o Confrontante</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="norte_cor">
@@ -784,22 +1035,27 @@
        <rect>
         <x>10</x>
         <y>70</y>
-        <width>241</width>
+        <width>211</width>
         <height>28</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 190, 111);</string>
       </property>
       <property name="placeholderText">
-       <string>Coordenada Norte</string>
+       <string>Digite a Coordenada Norte</string>
       </property>
      </widget>
      <widget class="QPushButton" name="btn_remove_ln_cor">
       <property name="geometry">
        <rect>
-        <x>160</x>
-        <y>170</y>
+        <x>130</x>
+        <y>150</y>
         <width>93</width>
         <height>28</height>
        </rect>
@@ -825,15 +1081,20 @@
        <rect>
         <x>10</x>
         <y>40</y>
-        <width>241</width>
+        <width>211</width>
         <height>28</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 190, 111);</string>
       </property>
       <property name="placeholderText">
-       <string>Coordenada Este</string>
+       <string>Digite a Coordenada Este</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="vertice_cor">
@@ -841,9 +1102,14 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>241</width>
+        <width>211</width>
         <height>28</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="toolTip">
        <string/>
@@ -852,14 +1118,14 @@
        <string notr="true">background-color: rgb(255, 190, 111);</string>
       </property>
       <property name="placeholderText">
-       <string>Vértice</string>
+       <string>Digite o Vértice</string>
       </property>
      </widget>
      <widget class="QPushButton" name="btn_add_ln_cor">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>170</y>
+        <y>150</y>
         <width>93</width>
         <height>28</height>
        </rect>
@@ -880,22 +1146,6 @@
        <string>+</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lote_vizinho_cor">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>130</y>
-        <width>241</width>
-        <height>28</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 190, 111);</string>
-      </property>
-      <property name="placeholderText">
-       <string>Lote Vizinho</string>
-      </property>
-     </widget>
     </widget>
    </widget>
   </widget>
@@ -904,9 +1154,14 @@
     <rect>
      <x>10</x>
      <y>350</y>
-     <width>461</width>
+     <width>441</width>
      <height>28</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
   </widget>
   <widget class="QLabel" name="lbl_arquivo">
@@ -914,9 +1169,14 @@
     <rect>
      <x>10</x>
      <y>310</y>
-     <width>481</width>
+     <width>431</width>
      <height>31</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>pdf</string>
@@ -927,8 +1187,8 @@
     <rect>
      <x>210</x>
      <y>10</y>
-     <width>291</width>
-     <height>271</height>
+     <width>231</width>
+     <height>211</height>
     </rect>
    </property>
    <property name="text">
@@ -946,12 +1206,33 @@
     <rect>
      <x>10</x>
      <y>290</y>
-     <width>491</width>
+     <width>431</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Arquivo PDF analisado:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>240</y>
+     <width>251</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>Arquivo PDF analisado:</string>
+    <string>&lt;a href=&quot;https://google.com&quot;&gt;Acesse o site&lt;/a&gt;</string>
+   </property>
+   <property name="openExternalLinks">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
@@ -982,7 +1263,6 @@
   <tabstop>este_cor</tabstop>
   <tabstop>norte_cor</tabstop>
   <tabstop>confrontante_cor</tabstop>
-  <tabstop>lote_vizinho_cor</tabstop>
   <tabstop>btn_salvar</tabstop>
   <tabstop>tbl_azimute</tabstop>
   <tabstop>vertice_ini</tabstop>
@@ -994,7 +1274,6 @@
   <tabstop>distancia</tabstop>
   <tabstop>vertice_az</tabstop>
   <tabstop>confrontante_az</tabstop>
-  <tabstop>num_lote_az</tabstop>
   <tabstop>btn_add_ln_az</tabstop>
   <tabstop>btn_remove_ln_az</tabstop>
   <tabstop>btn_az_recal_tabela</tabstop>
