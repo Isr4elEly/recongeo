@@ -1596,3 +1596,6 @@ A aplicação ocorre nas camadas definitivas carregadas do GPKG, antes de adicio
 Validação: `python3 -m py_compile `recongeo_dialog.py` recongeo.py` executado com sucesso.
 
 Fez alterações.
+
+
+na fução que cria o arquivo txt na parte de salvar a tabela de azimute e distÂncia ou a tabela de coordenada, simplifique o formato para que seja uma estrutura compatível com csv separado por ";". Atualmente cada linha é salva assim: <linha_2 = ["169H", "171294.440398", "9420529.841892", "283", "23", "50", "124", "283.397222", "-120.625602", "28.730892", "AVELINO JOSÉ DE SOUZA LOTE 243"]> modifique para ser assim <ML25;303120.0166;9412644.7607;155;20;22;857.85;155.339444;357.930643;-779.610337;PAULO C. DA SILVA;49>. Modifique o código para que o salvamento e a leitura funcionem corretamente.

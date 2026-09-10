@@ -8,6 +8,7 @@
 """
 
 import os
+import csv
 import json
 import math
 import shutil
@@ -1058,6 +1059,18 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             )
             return (nome_original, "", None)
 
+    @staticmethod
+    def escrever_tabela_csv(arquivo, tabela):
+        """Escreve as linhas de uma QTableWidget como CSV separado por ';'."""
+        escritor = csv.writer(arquivo, delimiter=';', lineterminator='\n')
+        for numero_linha in range(tabela.rowCount()):
+            valores = [
+                tabela.item(numero_linha, coluna).text()
+                if tabela.item(numero_linha, coluna) else ''
+                for coluna in range(tabela.columnCount())
+            ]
+            escritor.writerow(valores)
+
     def arquivos_finais(self):
         """Gera a pasta final com TXT, PDF e GPKG das camadas vetoriais."""
         nome_padrao = self.formatar_nome_padrao_do_arquivo()
@@ -1121,7 +1134,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                 crs_authid = crs.authid()
 
         try:
-            with open(caminho_txt, 'w', encoding='utf-8') as arquivo:
+            with open(caminho_txt, 'w', encoding='utf-8', newline='') as arquivo:
                 arquivo.write('[TITULO]\n')
                 for chave, valor in dados_titulo:
                     arquivo.write(f'{chave} = {valor}\n')
@@ -1134,16 +1147,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                     if tabela is None:
                         continue
                     arquivo.write(f'\n[{nome_secao}]\n')
-                    for numero_linha in range(tabela.rowCount()):
-                        valores = [
-                            tabela.item(numero_linha, coluna).text()
-                            if tabela.item(numero_linha, coluna) else ''
-                            for coluna in range(tabela.columnCount())
-                        ]
-                        registro = json.dumps(valores, ensure_ascii=False)
-                        arquivo.write(
-                            f'linha_{numero_linha + 1} = {registro}\n'
-                        )
+                    self.escrever_tabela_csv(arquivo, tabela)
 
             camadas = self.criar_camadas_coordenadas(adicionar_projeto=False)
             if not camadas:
@@ -1320,7 +1324,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
 
         # Salva o arquivo no formato .txt com as seções [TITULO] e [SRC]
         try:
-            with open(caminho_arquivo, "w", encoding="utf-8") as f:
+            with open(caminho_arquivo, "w", encoding="utf-8", newline="") as f:
                 f.write("[TITULO]\n")
                 for chave, valor in dados_titulo:
                     f.write(f"{chave} = {valor}\n")
@@ -1329,33 +1333,11 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
 
                 if hasattr(self, "tbl_coordenanda"):
                     f.write("\n[TABELA_COORDENADAS]\n")
-                    tabela = self.tbl_coordenanda
-                    for numero_linha in range(tabela.rowCount()):
-                        valores_linha = [
-                            tabela.item(numero_linha, coluna).text()
-                            if tabela.item(numero_linha, coluna) else ""
-                            for coluna in range(tabela.columnCount())
-                        ]
-                        registro = json.dumps(
-                            valores_linha,
-                            ensure_ascii=False,
-                        )
-                        f.write(f"linha_{numero_linha + 1} = {registro}\n")
+                    self.escrever_tabela_csv(f, self.tbl_coordenanda)
 
                 if hasattr(self, "tbl_azimute"):
                     f.write("\n[TABELA_AZIMUTE]\n")
-                    tabela = self.tbl_azimute
-                    for numero_linha in range(tabela.rowCount()):
-                        valores_linha = [
-                            tabela.item(numero_linha, coluna).text()
-                            if tabela.item(numero_linha, coluna) else ""
-                            for coluna in range(tabela.columnCount())
-                        ]
-                        registro = json.dumps(
-                            valores_linha,
-                            ensure_ascii=False,
-                        )
-                        f.write(f"linha_{numero_linha + 1} = {registro}\n")
+                    self.escrever_tabela_csv(f, self.tbl_azimute)
 
             mensagem_sucesso = f"Dados salvos com sucesso!\n\nArquivo TXT: {caminho_arquivo}"
             if pdf_cop and caminho_pdf_copiado:
@@ -1416,10 +1398,37 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                         continue
 
                     if secao_atual in [
-                        "TITULO",
-                        "SRC",
                         "TABELA_COORDENADAS",
                         "TABELA_AZIMUTE",
+                    ]:
+                        if not linha_strip:
+                            continue
+                        # Formato atual: uma linha CSV com ';' por registro.
+                        # Também preserva a leitura do formato legado
+                        # ``linha_N = [\"...\"]``.
+                        valores_linha = None
+                        if "=" in linha:
+                            chave, valor = linha.split("=", 1)
+                            if (chave.strip().startswith("linha_")
+                                    and valor.lstrip().startswith("[")):
+                                try:
+                                    valores_linha = json.loads(valor.strip())
+                                except json.JSONDecodeError:
+                                    valores_linha = None
+                        if valores_linha is None:
+                            valores_linha = next(csv.reader(
+                                [linha], delimiter=";", quotechar='"'
+                            ))
+
+                        if secao_atual == "TABELA_AZIMUTE":
+                            dados_azimute.append(valores_linha)
+                        else:
+                            dados_coordenadas.append(valores_linha)
+                        continue
+
+                    if secao_atual in [
+                        "TITULO",
+                        "SRC",
                     ]:
                         if "=" in linha:
                             chave, valor = linha.split("=", 1)
@@ -1428,10 +1437,6 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                                 dados_titulo[chave_atual] = valor.strip()
                             elif secao_atual == "SRC":
                                 dados_src[chave_atual] = valor.strip()
-                            elif secao_atual == "TABELA_AZIMUTE":
-                                dados_azimute.append(valor.strip())
-                            else:
-                                dados_coordenadas.append(valor.strip())
                         elif chave_atual == "obs":
                             # Continuação de observações com múltiplas linhas
                             dados_titulo["obs"] += "\n" + linha
@@ -1500,12 +1505,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if tem_secao_coordenadas and hasattr(self, "tbl_coordenanda"):
             tabela = self.tbl_coordenanda
             tabela.setRowCount(0)
-            for registro in dados_coordenadas:
-                try:
-                    valores_linha = json.loads(registro)
-                except json.JSONDecodeError:
-                    continue
-
+            for valores_linha in dados_coordenadas:
                 if not isinstance(valores_linha, list):
                     continue
 
@@ -1527,12 +1527,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if tem_secao_azimute and hasattr(self, "tbl_azimute"):
             tabela = self.tbl_azimute
             tabela.setRowCount(0)
-            for registro in dados_azimute:
-                try:
-                    valores_linha = json.loads(registro)
-                except json.JSONDecodeError:
-                    continue
-
+            for valores_linha in dados_azimute:
                 if not isinstance(valores_linha, list):
                     continue
 
@@ -1630,4 +1625,3 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             "nome_padrao_do_arquivo": self.nome_padrao_do_arquivo,
             "pdf_original": os.path.basename(self.caminho_pdf) if self.caminho_pdf else "",
         }
-
