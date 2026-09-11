@@ -1016,7 +1016,9 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
 
         # Formata o timestamp com a data e hora atuais da geração
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        nome_formatado = f"{gleba}-{num_titulo}-{num_lote}-{timestamp}"
+        # nome_formatado = f"{gleba}-{num_titulo}-{num_lote}-{timestamp}"
+        # alteração manual - israel
+        nome_formatado = f"{gleba}-{num_titulo}-{num_lote}"
 
         # Armazena o resultado na instância
         self.nome_padrao_do_arquivo = nome_formatado
