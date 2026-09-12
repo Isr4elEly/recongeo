@@ -1075,7 +1075,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             escritor.writerow(valores)
 
     def arquivos_finais(self):
-        """Gera a pasta final com TXT, PDF e GPKG das camadas vetoriais."""
+        """Gera a pasta final com TXT, PDF e, quando aplicável, GPKG."""
         nome_padrao = self.formatar_nome_padrao_do_arquivo()
         if not nome_padrao:
             return
@@ -1151,6 +1151,18 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                         continue
                     arquivo.write(f'\n[{nome_secao}]\n')
                     self.escrever_tabela_csv(arquivo, tabela)
+
+            planilha_status = (
+                self.planilha_status.currentText()
+                if hasattr(self, 'planilha_status') else ''
+            )
+            if planilha_status == 'Sem Planilha':
+                QMessageBox.information(
+                    self,
+                    'Arquivos finais',
+                    f'Arquivo TXT e cópia do PDF gerados em:\n{pasta_final}',
+                )
+                return
 
             camadas = self.criar_camadas_coordenadas(adicionar_projeto=False)
             if not camadas:
