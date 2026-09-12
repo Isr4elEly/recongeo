@@ -982,9 +982,9 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         Caso algum dos campos esteja vazio, exibe mensagem de erro e retorna None.
         Atualiza o QLabel 'lbl_arquivo_padrao' com o nome formatado.
         """
-        gleba = self.gleba.text().strip() if hasattr(self, 'gleba') else ""
-        num_titulo = self.num_titulo.text().strip() if hasattr(self, 'num_titulo') else ""
-        num_lote = self.num_lote.text().strip() if hasattr(self, 'num_lote') else ""
+        gleba = self.gleba.text().strip().replace("/", "-").replace("\\", "-") if hasattr(self, 'gleba') else ""
+        num_titulo = self.num_titulo.text().strip().replace("/", "-").replace("\\", "-") if hasattr(self, 'num_titulo') else ""
+        num_lote = self.num_lote.text().strip().replace("/", "-").replace("\\", "-") if hasattr(self, 'num_lote') else ""
 
         # Verificação dos campos obrigatórios
         campos_vazios = []
@@ -1021,7 +1021,8 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         nome_formatado = f"{gleba}-{num_titulo}-{num_lote}"
 
         # Armazena o resultado na instância
-        self.nome_padrao_do_arquivo = nome_formatado
+        # retirar simbolos do nome [/,\]
+        self.nome_padrao_do_arquivo = nome_formatado.replace("/", "-").replace("\\", "-")
 
         # Atualiza o QLabel 'lbl_arquivo_padrao' na interface
         if hasattr(self, 'lbl_arquivo_padrao'):
