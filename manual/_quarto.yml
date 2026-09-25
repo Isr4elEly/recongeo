@@ -13,7 +13,7 @@ book:
   language: pt
   date: "2026-09-25"
   date-format: full
-  cover-image: ../a7904fab-bea6-479f-a5d4-8832a9055c73.jpeg
+  cover-image: manual/imagens/a7904fab-bea6-479f-a5d4-8832a9055c73.jpeg
   chapters:
     - index.qmd
     - isntalacao.qmd

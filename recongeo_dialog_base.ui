@@ -1248,7 +1248,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>&lt;a href=&quot;https://google.com&quot;&gt;Acesse o site&lt;/a&gt;</string>
+    <string>&lt;a href=&quot;https://isr4elely.github.io/recongeo/&quot;&gt;Documentação&lt;/a&gt;</string>
    </property>
    <property name="openExternalLinks">
     <bool>true</bool>
