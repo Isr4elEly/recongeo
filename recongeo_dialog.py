@@ -913,7 +913,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
                 indice + 1,
                 valores_iniciais[0],
                 valores_finais[0],
-                valores_finais[confrontante_coluna],
+                valores_iniciais[confrontante_coluna],  # confrontante do vértice de origem do segmento
             ])
             feicoes_linhas.append(feicao_linha)
         camada_linhas.dataProvider().addFeatures(feicoes_linhas)

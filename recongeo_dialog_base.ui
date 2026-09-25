@@ -525,7 +525,7 @@
     </font>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="azimute">
     <attribute name="title">
@@ -539,6 +539,11 @@
        <width>721</width>
        <height>391</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
      </property>
      <column>
       <property name="text">
@@ -977,8 +982,13 @@
        <x>270</x>
        <y>10</y>
        <width>751</width>
-       <height>331</height>
+       <height>391</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
      </property>
      <column>
       <property name="text">
@@ -1007,7 +1017,7 @@
        <x>10</x>
        <y>10</y>
        <width>251</width>
-       <height>331</height>
+       <height>391</height>
       </rect>
      </property>
      <property name="frameShape">
