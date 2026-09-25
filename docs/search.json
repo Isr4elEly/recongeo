@@ -1,0 +1,202 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ReconGeo - Reconstituição de lotes titulados",
+    "section": "",
+    "text": "Introdução\nO plgin ReconGeo foi desenvolvido para o QGIS 3.x para auxiliar nos trabalhos de reconstituição de vetores com base em processos físicos de regularização fundiária do INCRA os quais não possuem representação digital das poligonais documentadas.\nO plugin visa coletar informações sobre o processo, titulado, título e veotres, reconstruído uma base mínima de informações para uso interno do INCRA.",
+    "crumbs": [
+      "Introdução"
+    ]
+  },
+  {
+    "objectID": "isntalacao.html",
+    "href": "isntalacao.html",
+    "title": "1  Instalação",
+    "section": "",
+    "text": "1.1 Complementos do QGIS\nO plugin é distribuído via arquivo .zip para ser instalado no QGIS 3.x.\nAinda na janela de Complementos verifique se o plgin aparece na seção de instalados.\nPode fecha essa janela.\nO plugin pode ser acessado pelo menu de Complementos ou pelo ícone nas ferramentas.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Instalação</span>"
+    ]
+  },
+  {
+    "objectID": "isntalacao.html#complementos-do-qgis",
+    "href": "isntalacao.html#complementos-do-qgis",
+    "title": "1  Instalação",
+    "section": "",
+    "text": "Note\n\n\n\n\nClique no menu Complementos\nDepois em Carregar e instalar complementos.\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nClique em instalar a partir do ZIP.\nClique no botão e selecione o arquivo .zip do plugin.\nClique em Instalar complemento.\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nClique em instalados\nVeja se aparece o pluin Recongeo na lista\nVeja o ícone do plugin\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nClique no menu Complementos\nDepois em ReconGeo\nAbrir ReconGeo.\nou Clique no ícone do plugin",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Instalação</span>"
+    ]
+  },
+  {
+    "objectID": "tela-principal.html",
+    "href": "tela-principal.html",
+    "title": "2  Tela Principal",
+    "section": "",
+    "text": "2.1 Seção de infomações gerais\nAbaixo são apresentadas as principais funcionalidades.\nA verificação do desenho entes da finalização mostra como a figura e os dados digitados irão ficar, podendo evidenciar erros de digitação ou de seleção de sistema de coordenandas.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Tela Principal</span>"
+    ]
+  },
+  {
+    "objectID": "tela-principal.html#seção-de-infomações-gerais",
+    "href": "tela-principal.html#seção-de-infomações-gerais",
+    "title": "2  Tela Principal",
+    "section": "",
+    "text": "Note\n\n\n\n\nInformar o número do processo administrativo\nInformar o nome da gleba, usar “-” pra separar informações\nInformar o número do título\nInformar o número do lote\nInformar a data de emissão do título\nInformar o nome do lote\nInformar o nome do titulado\nInformar a área em hectares do lote\nInformar a sigla do estado\nInformar o nome do município\nA data de análise é preenchida automaticamente com a data atual\nMarcar caso o documento analisado tenha sido inserido no SIGEF, colocar o código SIGEF ou o CPF do tilutado nas observações;\nSelecionar o tipo de reconstituição conforme o desenho teporário e os dados da tabela.\n\nPlanilha conforme: os dados estão de acordo com o memorial e a planta saiu conforme o mapa da documentação (pdf)\nPlanilha incompleta: os dados do memorial foram digitados mas não foi possível completar a poligonal, casos em confrontação com rios ou estradas.\nPlanilha não comforme: os dados foram digitados e conferidos mas o vetor NÃO corresponde ao mapa da documentação (pdf)\nSem planilha: os dados contidos na documentação NÃO possibilitam a digitação da planilha;\n\nInformar algum dado relevante ou erro na reconsttituição.\n\n\n\n\n\n\n\n\n\n\nWarning\n\n\n\nPara todos os PDF de processos devem ser preenchidas as informações desta seção, no caso de processos sem planilha, serão gerados apensa o .txt e o .pdf padronizado na pasta para entrega final.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Tela Principal</span>"
+    ]
+  },
+  {
+    "objectID": "analise-inicial.html",
+    "href": "analise-inicial.html",
+    "title": "3  Arquivo pdf analisado",
+    "section": "",
+    "text": "Quando abrimos um arquivo pdf pelo plugin, o nome aparece na seção Arquivo PDF Analisado.\n\n\n\n\n\n\nNote\n\n\n\n\nNome do arquivo PDF analisado",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Arquivo pdf analisado</span>"
+    ]
+  },
+  {
+    "objectID": "src.html",
+    "href": "src.html",
+    "title": "4  Sistema de referência de coordenadas dos vetores (SRC)",
+    "section": "",
+    "text": "4.1 Coletando informações na base cartográfica.\nCom as informações cartográficas de apoio como as poligonais de glebas federais, e a grade de fusos UTM, podemos identificar as informações omissas no memorial. A gleba em questão está localizada no fuso UTM 21S.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Sistema de referência de coordenadas dos vetores (SRC)</span>"
+    ]
+  },
+  {
+    "objectID": "src.html#selecionando-o-src.",
+    "href": "src.html#selecionando-o-src.",
+    "title": "4  Sistema de referência de coordenadas dos vetores (SRC)",
+    "section": "4.2 Selecionando o SRC.",
+    "text": "4.2 Selecionando o SRC.\n\n\n\n\n\n\nNote\n\n\n\n\nSelecione o SRC na lista dos já utilizados;\nou clique no botão de buscar para selecionar ou SRC\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nDigite o nome do SRC para filtrar na lista;\nselecione o sistema desejado\nclique em OK.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Sistema de referência de coordenadas dos vetores (SRC)</span>"
+    ]
+  },
+  {
+    "objectID": "src.html#tipos-de-informações-cartográficas-do-memorial",
+    "href": "src.html#tipos-de-informações-cartográficas-do-memorial",
+    "title": "4  Sistema de referência de coordenadas dos vetores (SRC)",
+    "section": "4.3 Tipos de informações cartográficas do memorial",
+    "text": "4.3 Tipos de informações cartográficas do memorial\nAs planilhas de coordenadas a serem digitadas com as informações do processo podem ser de dois tipos:\n\nBaseadas em Azimutes e distâncias: nesse modelo o memorial apresenta-se no formato de texto, geralmente, onde identificamos um vértice de partida com uma coordenada, e segue-se informando os ângulos (azimute) e as distâncias até o fechamento da poligonal.\nTabela de Coordenadas: nesse modelo o memorial vem em formato de tabela contendo colunas com os vértices, coordenada Este e coordenada Norte.\n\nAzimute e Distância\n\nCoordenadas",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Sistema de referência de coordenadas dos vetores (SRC)</span>"
+    ]
+  },
+  {
+    "objectID": "az-dist.html",
+    "href": "az-dist.html",
+    "title": "5  Memorial de azimute e distância.",
+    "section": "",
+    "text": "5.1 Informando as confrontações\nInserimos as informações inciais para o memorial e adicionamos o ponto de partida à tabela.\nDigite as informações do caminhamento seguindo as informações do azimute e distância conforme o memorial e clique no botão de adicionar (+).\nRepita o processo até a inserção de toas as informações. CAso não tenha o confrontante, preencha com “xxx” por exemplo e edite na tabela posteiormente.\nNo memroial pode não existir as confrontações ou essas iformações pode estar incompletas. Podemos editar a tebela usando a planta do processo como referência dando dois cliques sobre a célula que deseja editar.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Memorial de azimute e distância.</span>"
+    ]
+  },
+  {
+    "objectID": "az-dist.html#gerando-os-vetores-temporários",
+    "href": "az-dist.html#gerando-os-vetores-temporários",
+    "title": "5  Memorial de azimute e distância.",
+    "section": "5.2 Gerando os vetores temporários",
+    "text": "5.2 Gerando os vetores temporários\n\n\n\nApós preencher as informações da tabela, podemos clicar no botão para gerar os vetores temporários para visualizar os arquivos reconstituídos.\n\n\n\n\n\n\n\nComparando o desenho com o mapa do processo podemos classificar essa reconstituição como Planilha Conforme.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Memorial de azimute e distância.</span>"
+    ]
+  },
+  {
+    "objectID": "az-dist.html#gerando-os-arquivos-finais",
+    "href": "az-dist.html#gerando-os-arquivos-finais",
+    "title": "5  Memorial de azimute e distância.",
+    "section": "5.3 Gerando os arquivos finais",
+    "text": "5.3 Gerando os arquivos finais\n\n\n\nApós a conferência dsa informações, poderemos gerar os Arquivos Finais. Clique no botão correspondente e informe o local onde a pasta será criada e os arquivos salvos.\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nLocal de salvamento.\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nMensagem de confirmação.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Memorial de azimute e distância.</span>"
+    ]
+  },
+  {
+    "objectID": "az-dist.html#arquivos-definitivos",
+    "href": "az-dist.html#arquivos-definitivos",
+    "title": "5  Memorial de azimute e distância.",
+    "section": "5.4 Arquivos definitivos",
+    "text": "5.4 Arquivos definitivos\nOs aquivos finais serão salvos e os vetores, se existirem, serão carregados no QGIS.\n\nArquivos Padronizados\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nPasta de arquivos definitivos\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nVetores em .GPKG\nProcesso em .PDF\nMeta dados em .TXT\n\n\n\n\n\n\n\n\n\n\n\n\nClique no botão de limpar o formulário para reconstituir outro processo.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Memorial de azimute e distância.</span>"
+    ]
+  },
+  {
+    "objectID": "coord.html",
+    "href": "coord.html",
+    "title": "6  Memorial por coordenadas",
+    "section": "",
+    "text": "6.1 Verificando o desenho temporário\nNo memorial abaixo temos uma tabela de coordenadas com os vértices já no padrão da certificação do INCRA. Note que o mesmorial traz a seguinte informação na coluna de coordenadas, Coordenadas UTM do vértice “para”.\nO desenho gerado não corresponde ao mapa da documentação.\nConferência da tabela de coordenadas",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Memorial por coordenadas</span>"
+    ]
+  },
+  {
+    "objectID": "coord.html#verificando-o-desenho-temporário",
+    "href": "coord.html#verificando-o-desenho-temporário",
+    "title": "6  Memorial por coordenadas",
+    "section": "",
+    "text": "Note\n\n\n\n\nVetores temporários do ReconGeo\nMapa do processo.\n\n\n\n\n\n\n\n\nA tabela de coordenadas deve ser revisada para verificação de erros de digitação. Nada Foi encontrado, assim, marcamos a reconstituição como Planilha não conforme, ou seja, os dados informados não geram o desenho do processo.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Memorial por coordenadas</span>"
+    ]
+  },
+  {
+    "objectID": "coord.html#análise",
+    "href": "coord.html#análise",
+    "title": "6  Memorial por coordenadas",
+    "section": "6.2 Análise",
+    "text": "6.2 Análise\n\nA análise do mapa do processo no QGIS mostra que, apesar da informação na tabela de coordenadas mostrar que os valores de Este e Norte são correspondentes aos vértices da coluna “para”, o desenho mostra o ponto de código “AA4-M-4080” no local do ponto “A7P-M-EG29”, e a falta de um vértice na tabela, o desenho possui 13 vértices, mas a tabela está com 12 vértices.\nA planta do processo foi georreferenciada para comparação.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Memorial por coordenadas</span>"
+    ]
+  },
+  {
+    "objectID": "coord.html#arquivos-finais",
+    "href": "coord.html#arquivos-finais",
+    "title": "6  Memorial por coordenadas",
+    "section": "6.3 Arquivos finais",
+    "text": "6.3 Arquivos finais\nA observação é anotada e os arquivos finais são gerados segundo os dados do processo.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Memorial por coordenadas</span>"
+    ]
+  },
+  {
+    "objectID": "del-linha.html",
+    "href": "del-linha.html",
+    "title": "7  Função de remover linha",
+    "section": "",
+    "text": "Nas duas tabelas é possível deletar uma linha já digitada, basta selecionar a linha desejada e clicar no botão (-). A tabela de azimute e distância, dependendo da linha eliminada, será necessário o recálculo das coordendas das linhas abaixo, esse funcionalidade é explicada abaixo.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Função de remover linha</span>"
+    ]
+  },
+  {
+    "objectID": "recalc.html",
+    "href": "recalc.html",
+    "title": "8  Recálculando a tabela de azimute e distência.",
+    "section": "",
+    "text": "8.1 Estimando a coordenada do rio\nNa tabela de azimute e distancia, as coordenadas do vértice posterior (vante) é calculada com base no vértice anterior (ré), assim, caso haja uma modificação na tabela em uma determinada linha, as informações seguintes necessitam ser recalculadas.\nCaso de estudo\nAbaixo temos o caso do lote 344 na gleba Frades no Maranhão.\nA planta menciona o Rio Lontra como marco no memorial descritivo.\nPlanta do processo\nMemorial descritivo do processo\nComo não há os azimutes do trecho do rio, apenas a distância, as coordenadas seguintes ficam prejudicadas, refletindo no desenho dos vértices posteriores.\nDesenho dos vetores temporários conforme memorial\nPodemos utilizar bases cartográficas como apoio na definição da coordenada do ponto MG508 para que a reconstituição assuma um formato coerente. Esse tipo de procedimento não está normatizado pelo INCRA!\nNesse caso foi utilizado as cartas do plugin BDGex para localizar o Rio Lontra.\nFoi traçado uma linha com a distância mencionada no memorial.\nA coordenada foi estimada pela tela do QGIS, lembrando que o sistema de coordenadas do projeto deve ser configurado conforme o do memorial.\nA coordenada estimada para o ponto MG508 no EPSG 29193 seria Este 169266,8 e Norte 9439927,0.\nPlanilha original\nEditando a coordenada\nVamos editar a tebela na linha 2 informando as coordenadas estimadas.",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Recálculando a tabela de azimute e distência.</span>"
+    ]
+  },
+  {
+    "objectID": "recalc.html#recalculando",
+    "href": "recalc.html#recalculando",
+    "title": "8  Recálculando a tabela de azimute e distência.",
+    "section": "8.2 Recalculando",
+    "text": "8.2 Recalculando\nPara efetuar o procedimento de recalcular as linhas subsequentes, temos que selecionar a linha logo abaixo da partida (a que foi modifiacda) e clicar no botão recalc.\n\nComparando as tabelas antes e após o recálculo podemos notar a modificação das coordenadas.\n\nCom os novos vetores podemos georreferenciar o mapa do processo e verificar o resultado.\n\n\n\n\n\n\nNote\n\n\n\n\nMapa do lote que consta no processo analisado.",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Recálculando a tabela de azimute e distência.</span>"
+    ]
+  }
+]

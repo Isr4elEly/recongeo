@@ -1,0 +1,67 @@
+# Recálculando a tabela de azimute e distência.
+
+Na tabela de azimute e distancia, as coordenadas do vértice posterior (**vante**) é calculada com base no vértice anterior (**ré**), assim, caso haja uma modificação na tabela em uma determinada linha, as informações seguintes necessitam ser recalculadas.
+
+**Caso de estudo**
+
+Abaixo temos o caso do lote 344 na gleba Frades no Maranhão.
+
+A planta menciona o Rio Lontra como marco no memorial descritivo.
+
+**Planta do processo**
+![](imagens/2026-09-25_10-00.jpeg)
+
+**Memorial descritivo do processo**
+![](imagens/2026-09-25_10-01.jpeg)
+
+Como não há os azimutes do trecho do rio, apenas a distância, as coordenadas seguintes ficam prejudicadas, refletindo no desenho dos vértices posteriores.
+
+**Desenho dos vetores temporários conforme memorial**
+![](imagens/2026-09-25_10-07.jpeg)
+
+## Estimando a coordenada do rio
+
+Podemos utilizar bases cartográficas como apoio na definição da coordenada do ponto **MG508** para que a reconstituição assuma um formato coerente. Esse tipo de procedimento não está normatizado pelo INCRA!
+
+Nesse caso foi utilizado as cartas do plugin BDGex para localizar o Rio Lontra.
+
+![](imagens/2026-09-25_10-10.jpeg)
+
+Foi traçado uma linha com a distância mencionada no memorial.
+
+![](imagens/2026-09-25_10-17.jpeg)
+
+A coordenada foi estimada pela tela do QGIS, lembrando que o sistema de coordenadas do projeto deve ser configurado conforme o do memorial.
+
+![](imagens/2026-09-25_10-20.jpeg)
+
+A coordenada estimada para o ponto **MG508** no EPSG 29193 seria Este 169266,8 e Norte 9439927,0.
+
+**Planilha original**
+
+![](imagens/2026-09-25_10-16.jpeg)
+
+**Editando a coordenada**
+
+Vamos editar a tebela na linha 2 informando as coordenadas estimadas.
+
+![](imagens/2026-09-25_10-24.jpeg)
+
+## Recalculando
+
+Para efetuar o procedimento de recalcular as linhas subsequentes, temos que selecionar a linha logo abaixo da partida (a que foi modifiacda) e clicar no botão **recalc**.
+
+![](imagens/2026-09-25_10-27.jpeg)
+
+Comparando as tabelas antes e após o recálculo podemos notar a modificação das coordenadas.
+
+![](imagens/2026-09-25_10-33.jpeg)
+
+Com os novos vetores podemos georreferenciar o mapa do processo e verificar o resultado.
+
+::: {.callout-note}
+
+1. Mapa do lote que consta no processo analisado.
+:::
+
+![](imagens/2026-09-25_10-34.jpeg)

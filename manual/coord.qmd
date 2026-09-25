@@ -1,0 +1,47 @@
+# Memorial por coordenadas
+
+No memorial abaixo temos uma tabela de coordenadas com os vértices já no padrão da certificação do INCRA. Note que o mesmorial traz a seguinte informação na coluna de coordenadas, *Coordenadas UTM do vértice "para"*. 
+
+![](imagens/2026-09-24_14-06.jpeg)
+
+## Verificando o desenho temporário
+
+O desenho gerado não corresponde ao mapa da documentação.
+
+![](imagens/2026-09-24_23-32.jpeg)
+
+
+::: {.callout-note}
+
+1. Vetores temporários do ReconGeo
+2. Mapa do processo.
+
+:::
+
+![](imagens/2026-09-24_14-12.jpeg)
+
+**Conferência da tabela de coordenadas**
+
+::: {layout-ncol="2"}
+
+A tabela de coordenadas deve ser revisada para verificação de erros de digitação. Nada Foi encontrado, assim, marcamos a reconstituição como **Planilha não conforme**, ou seja, os dados informados não geram o desenho do processo.
+
+![](imagens/2026-09-25_12-03.jpeg)
+:::
+
+## Análise
+
+![](imagens/2026-09-24_23-27.jpeg)
+
+A análise do mapa do processo no QGIS mostra que, apesar da informação na tabela de coordenadas mostrar que os valores de **Este** e **Norte** são correspondentes aos vértices da coluna **"para"**, o desenho mostra o ponto de código **"AA4-M-4080"** no local do ponto **"A7P-M-EG29"**, e a falta de um vértice na tabela, o desenho possui **13 vértices**, mas a tabela está com **12 vértices**.
+
+A planta do processo foi georreferenciada para comparação.
+
+![](imagens/2026-09-24_23-56.jpeg)
+
+## Arquivos finais
+
+A observação é anotada e os arquivos finais são gerados segundo os dados do processo.
+
+![](imagens/2026-09-25_00-01.jpeg)
+

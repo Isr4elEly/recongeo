@@ -1,0 +1,11 @@
+# Arquivo pdf analisado
+
+Quando abrimos um arquivo pdf pelo plugin, o nome aparece na seção **Arquivo PDF Analisado.**
+
+
+::: {.callout-note}
+1. Nome do arquivo PDF analisado
+:::
+
+![](imagens/2026-09-24_12-02.jpeg)
+

@@ -1,0 +1,65 @@
+project:
+  type: book
+  output-dir: ../docs
+
+jupyter: python3
+
+book:
+  sidebar:
+    search: true
+  title: "ReconGeo - Reconstituição de lotes titulados"
+  language: pt
+  date: "2026-05-17"
+  date-format: full
+  cover-image: ../a7904fab-bea6-479f-a5d4-8832a9055c73.jpeg
+  chapters:
+    - index.qmd
+    - isntalacao.qmd
+    - tela-principal.qmd
+    - analise-inicial.qmd
+    - src.qmd
+    - az-dist.qmd
+    - coord.qmd
+    - del-linha.qmd
+    - recalc.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: litera
+    default-image-extension: jpg
+    page-layout: full
+    link-external-newwindow: true
+    grid: 
+      sidebar-width: 300px
+      body-width: 1100px
+      margin-width: 100px
+      gutter-width: 1.5rem
+    css: style.css
+    toc: false
+    fig-width: 10
+    fig-height: 8
+    fig-align: center
+
+  pdf:
+    documentclass: book
+    toc: true
+    lang: "pt-br"
+    geometry: 
+      - top=30mm
+      - left=25mm
+      - right=20mm
+    number-sections: true
+    colorlinks: true
+    papersize: "a4"
+    fontsize: 11pt
+
+lenguage:
+  leng: pt-br
+
+plugins:
+  - mkquartodocs
+
+
+

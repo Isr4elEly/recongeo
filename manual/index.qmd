@@ -1,0 +1,7 @@
+# Introdução {.unnumbered}
+
+O plgin ReconGeo foi desenvolvido para o QGIS 3.x para auxiliar nos trabalhos de reconstituição de vetores com base em processos físicos de regularização fundiária do INCRA os quais não possuem representação digital das poligonais documentadas.
+
+O plugin visa coletar informações sobre o processo, titulado, título e veotres, reconstruído uma base mínima de informações para uso interno do INCRA.
+
+

@@ -1,0 +1,41 @@
+
+# Sistema de referência de coordenadas dos vetores (SRC)
+
+## Coletando informações na base cartográfica.
+
+![](imagens/2026-09-24_13-27_1.jpeg)
+
+Com as informações cartográficas de apoio como as poligonais de glebas federais, e a grade de fusos UTM, podemos identificar as informações omissas no memorial. A gleba em questão está localizada no fuso UTM 21S.
+
+## Selecionando o SRC.
+
+::: {.callout-note}
+1. Selecione o SRC na lista dos já utilizados;
+2. ou clique no botão de buscar para selecionar ou SRC
+:::
+
+![](imagens/2026-09-24_12-08.jpeg)
+
+::: {.callout-note}
+1. Digite o nome do SRC para filtrar na lista;
+2. selecione o sistema desejado
+3. clique em OK.
+:::
+
+![](imagens/2026-09-24_12-09.jpeg)
+
+
+## Tipos de informações cartográficas do memorial
+
+As planilhas de coordenadas a serem digitadas com as informações do processo podem ser de dois tipos: 
+
+- Baseadas em Azimutes e distâncias: nesse modelo o memorial apresenta-se no formato de texto, geralmente, onde identificamos um vértice de partida com uma coordenada, e segue-se informando os ângulos (azimute) e as distâncias até o fechamento da poligonal.
+- Tabela de Coordenadas: nesse modelo o memorial vem em formato de tabela contendo colunas com os vértices, coordenada Este e coordenada Norte.
+
+**Azimute e Distância**
+
+![](imagens/2026-09-24_12-17.jpeg)
+
+**Coordenadas**
+
+![](imagens/2026-09-24_12-17_1.jpeg)

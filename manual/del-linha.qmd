@@ -1,0 +1,5 @@
+# Função de remover linha
+
+Nas duas tabelas é possível deletar uma linha já digitada, basta selecionar a linha desejada e clicar no botão (-). A tabela de azimute e distância, dependendo da linha eliminada, será necessário o recálculo das coordendas das linhas abaixo, esse funcionalidade é explicada abaixo.
+
+![](imagens/2026-09-25_12-10.jpeg)
