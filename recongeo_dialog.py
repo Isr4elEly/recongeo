@@ -11,6 +11,7 @@ import os
 import csv
 import json
 import math
+import re
 import shutil
 from datetime import datetime
 from qgis.PyQt import uic
@@ -1018,11 +1019,14 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         # nome_formatado = f"{gleba}-{num_titulo}-{num_lote}-{timestamp}"
         # alteração manual - israel
-        nome_formatado = f"{gleba}-{num_titulo}-{num_lote}"
+        # Definir o padrão regex de limpeza para remover: { } ( ) / \ " '
+        padrao_limpeza = r"[\{\}\(\)\/\\\"' °º.]"
+        # Gera o novo nome limpo usando regex
+        nome_formatado = re.sub(padrao_limpeza, "", f"{gleba}-{num_titulo}-{num_lote}").strip()
 
         # Armazena o resultado na instância
         # retirar simbolos do nome [/,\]
-        self.nome_padrao_do_arquivo = nome_formatado.replace("/", "-").replace("\\", "-")
+        self.nome_padrao_do_arquivo = nome_formatado #.replace("/", "-").replace("\\", "-")
 
         # Atualiza o QLabel 'lbl_arquivo_padrao' na interface
         if hasattr(self, 'lbl_arquivo_padrao'):
