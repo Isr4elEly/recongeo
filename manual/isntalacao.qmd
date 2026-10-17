@@ -21,6 +21,8 @@ O plugin é distribuído via arquivo .zip para ser instalado no QGIS 3.x.
 ![](imagens/2026-09-24_11-29.jpeg)
 
 
+Ainda na janela de Complementos verifique se o plgin aparece na seção de instalados.
+
 ::: {.callout-note}
 1. Clique em instalados
 2. Veja se aparece o pluin Recongeo na lista
@@ -29,11 +31,9 @@ O plugin é distribuído via arquivo .zip para ser instalado no QGIS 3.x.
 
 ![](imagens/2026-09-24_11-30.jpeg)
 
-Ainda na janela de Complementos verifique se o plgin aparece na seção de instalados.
+## Abrindo o plugin
 
-Pode fecha essa janela.
-
-O plugin pode ser acessado pelo menu de Complementos ou pelo ícone nas ferramentas.
+O plugin pode ser acessado pelo menu de **Complementos** ou pelo ícone nas ferramentas.
 
 ::: {.callout-note}
 1. Clique no menu Complementos

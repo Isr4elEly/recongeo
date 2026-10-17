@@ -8,9 +8,6 @@ No memorial abaixo temos uma tabela de coordenadas com os vértices já no padr�
 
 O desenho gerado não corresponde ao mapa da documentação.
 
-![](imagens/2026-09-24_23-32.jpeg)
-
-
 ::: {.callout-note}
 
 1. Vetores temporários do ReconGeo

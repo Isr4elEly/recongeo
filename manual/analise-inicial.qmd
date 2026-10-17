@@ -9,3 +9,8 @@ Quando abrimos um arquivo pdf pelo plugin, o nome aparece na seção **Arquivo P
 
 ![](imagens/2026-09-24_12-02.jpeg)
 
+::: {.callout-warning}
+
+É importante acessar os arquivos PDF dos processos por dentro do plugin para que ele possa capturar o local destes arquivos e, posteriormente, criar todos os arquivos finais agrupados numa mesma pasta.
+
+:::

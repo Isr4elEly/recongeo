@@ -4,6 +4,7 @@
 Abaixo são apresentadas as principais funcionalidades.
 
 ::: {.callout-note}
+
 1. Botão para abrir o PDF com as informações do processo a ser reconstituído;
 2. Botão para salvar os dados do formulário de forma temporária para finalização posterior.
 3. Carrega um arquivo .txt do plugin com as informações do formulário salvas anteriormente.
@@ -14,7 +15,12 @@ Abaixo são apresentadas as principais funcionalidades.
 
 ![](imagens/2026-09-24_11-31_1.jpeg)
 
-A verificação do desenho entes da finalização mostra como a figura e os dados digitados irão ficar, podendo evidenciar erros de digitação ou de seleção de sistema de coordenandas.
+::: {.callout-warning}
+
+É importante acessar os arquivos PDF dos processos por dentro do plugin para que ele possa capturar o local destes arquivos e, posteriormente, criar todos os arquivos finais agrupados numa mesma pasta.
+
+:::
+
 
 ## Seção de infomações gerais
 
@@ -33,10 +39,10 @@ A verificação do desenho entes da finalização mostra como a figura e os dado
 11. A data de análise é preenchida automaticamente com a data atual
 12. Marcar caso o documento analisado tenha sido inserido no SIGEF, colocar o código SIGEF ou o CPF do tilutado nas observações;
 13. Selecionar o tipo de reconstituição conforme o desenho teporário e os dados da tabela.
-    1.  Planilha conforme: os dados estão de acordo com o memorial e a planta saiu conforme o mapa da documentação (pdf)
-    2.  Planilha incompleta: os dados do memorial foram digitados mas não foi possível completar a poligonal, casos em confrontação com rios ou estradas.
-    3.  Planilha não comforme: os dados foram digitados e conferidos mas o vetor NÃO corresponde ao mapa da documentação (pdf)
-    4.  Sem planilha: os dados contidos na documentação NÃO possibilitam a digitação da planilha;
+    1.  **Planilha conforme**: os dados estão de acordo com o memorial e a planta saiu conforme o mapa da documentação (pdf)
+    2.  **Planilha incompleta**: os dados do memorial foram digitados mas não foi possível completar a poligonal, casos em confrontação com rios ou estradas.
+    3.  **Planilha não comforme**: os dados foram digitados e conferidos mas o vetor NÃO corresponde ao mapa da documentação (pdf)
+    4.  **Sem planilha**: os dados contidos na documentação NÃO possibilitam a digitação da planilha;
 14. Informar algum dado relevante ou erro na reconsttituição.
 :::
 
@@ -44,6 +50,6 @@ A verificação do desenho entes da finalização mostra como a figura e os dado
 
 ::: {.callout-warning}
 
-Para todos os PDF de processos devem ser preenchidas as informações desta seção, no caso de processos sem planilha, serão gerados apensa o .txt e o .pdf padronizado na pasta para entrega final.
+Para todos os arquivos PDF de processos analisador devem ser preenchidas as informações desta seção. Para o caso de processos **sem planilha**, serão gerados apensa o **.txt** e o **.pdf** padronizados na pasta para entrega final.
 :::
 

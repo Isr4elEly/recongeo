@@ -9,9 +9,9 @@ Inserimos as informações inciais para o memorial e adicionamos o ponto de part
 
 ![](imagens/2026-09-24_13-27.jpeg)
 
-Digite as informações do caminhamento seguindo as informações do azimute e distância conforme o memorial e clique no botão de adicionar (+).
+Digite as informações do caminhamento seguindo o memorial do azimute e distância conforme o memorial e clique no botão de adicionar (+).
 
-Repita o processo até a inserção de toas as informações. CAso não tenha o confrontante, preencha com "xxx" por exemplo e edite na tabela posteiormente.
+Repita o processo até a inserção de toas as informações. Caso não tenha o confrontante, preencha com "xxx", por exemplo, e edite na tabela posteiormente!
 
 ![](imagens/2026-09-24_13-33.jpeg)
 
@@ -19,14 +19,14 @@ Repita o processo até a inserção de toas as informações. CAso não tenha o 
 
 ## Informando as confrontações
 
-No memroial pode não existir as confrontações ou essas iformações pode estar incompletas. Podemos editar a tebela usando a planta do processo como referência dando dois cliques sobre a célula que deseja editar.
+No memroial pode não existir as confrontações ou essas informações pode estar incompletas. Podemos editar a tebela usando a planta do processo como referência dando dois cliques sobre a célula que deseja editar.
 
 ![](imagens/2026-09-24_13-47.jpeg)
 
 ## Gerando os vetores temporários
 
 ::: {layout-ncol="2"}
-Após preencher as informações da tabela, podemos clicar no botão para gerar os vetores temporários para visualizar os arquivos reconstituídos.
+Após preencher as informações da tabela, podemos clicar no botão para gerar os vetores temporários visualizando os arquivos reconstituídos.
 
 ![](imagens/2026-09-25_11-43.jpeg)
 :::
@@ -37,7 +37,7 @@ Comparando o desenho com o mapa do processo podemos classificar essa reconstitui
 ## Gerando os arquivos finais
 
 ::: {layout-ncol="2"}
-Após a conferência dsa informações, poderemos gerar os **Arquivos Finais**. Clique no botão correspondente e informe o local onde a pasta será criada e os arquivos salvos.
+Após a conferência das informações, poderemos gerar os **Arquivos Finais**. Clique no botão correspondente e informe o local onde a pasta será criada e os arquivos salvos.
 
 ![](imagens/2026-09-25_11-46.jpeg)
 :::
