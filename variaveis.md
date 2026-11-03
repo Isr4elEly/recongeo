@@ -18,6 +18,7 @@
 - btn_add_ln_cor
 - btn_remove_ln_cor
 - btn_limp_form
+- btn_sigef_import
 
 ## label (QLabel)
 

@@ -172,6 +172,12 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if hasattr(self, 'btn_add_ln_cor'):
             self.btn_add_ln_cor.clicked.connect(self.adicionar_linha_coordenada)
 
+        # Conecta o botão btn_sigef_import à função de importação de dados do SIGEF
+        if hasattr(self, 'btn_sigef_import'):
+            self.btn_sigef_import.clicked.connect(
+                lambda checked=False: self.importar_sigef()
+            )
+
         if hasattr(self, 'btn_add_ln_az'):
             self.btn_add_ln_az.clicked.connect(
                 lambda checked=False: self.adicionar_linha_azimute()
@@ -189,6 +195,7 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
             )
 
         if hasattr(self, 'tbl_coordenanda'):
+            self.tbl_coordenada = self.tbl_coordenanda
             self.tbl_coordenanda.setSelectionBehavior(
                 QtWidgets.QAbstractItemView.SelectRows
             )
@@ -723,6 +730,260 @@ class ReconGeoDialog(QtWidgets.QDialog, FORM_CLASS):
         if hasattr(self, 'vertice_cor'):
             self.vertice_cor.setFocus()
         self.atualizar_estado_abas_tabelas()
+
+    @staticmethod
+    def extrair_coordenadas_wkt(wkt_texto):
+        """Extrai e separa as coordenadas este e norte dos vértices DO_VERTICE e AO_VERTICE
+        a partir de uma geometria LINESTRING em formato WKT.
+
+        O primeiro par de coordenadas corresponde a DO_VERTICE (este, norte),
+        e o segundo par corresponde a AO_VERTICE (este, norte).
+
+        Retorna:
+            tuple: (este_do, norte_do, este_ao, norte_ao) como strings, ou (None, None, None, None).
+        """
+        if not wkt_texto:
+            return None, None, None, None
+
+        # Expressão regular para capturar os pares de coordenadas de LINESTRING
+        padrao = r'LINESTRING\s*(?:Z|M|ZM)?\s*\(\s*([^\(\)]+)\s*\)'
+        match = re.search(padrao, wkt_texto, re.IGNORECASE)
+        if match:
+            partes_coords = [p.strip() for p in match.group(1).split(',') if p.strip()]
+            if len(partes_coords) >= 2:
+                pt_do = partes_coords[0].split()
+                pt_ao = partes_coords[1].split()
+                if len(pt_do) >= 2 and len(pt_ao) >= 2:
+                    return pt_do[0], pt_do[1], pt_ao[0], pt_ao[1]
+
+        # Fallback via QgsGeometry
+        try:
+            geom = QgsGeometry.fromWkt(wkt_texto)
+            if geom and not geom.isEmpty():
+                if geom.isMultipart():
+                    polylines = geom.asMultiPolyline()
+                    pts = polylines[0] if polylines else []
+                else:
+                    pts = geom.asPolyline()
+                if len(pts) >= 2:
+                    return str(pts[0].x()), str(pts[0].y()), str(pts[1].x()), str(pts[1].y())
+        except Exception:
+            pass
+
+        return None, None, None, None
+
+    def importar_sigef(self, caminho_arquivo=None, exibir_mensagem=True):
+        """Abre uma janela de diálogo para importar um arquivo .csv com dados do SIGEF.
+        
+        Mapeia as colunas:
+            - DO_VERTICE
+            - AO_VERTICE
+            - CONFRONTANTE_DESC
+            - GEOMETRIA_WKT
+            
+        Separa os dados este e norte de cada par contido no WKT LINESTRING (DO_VERTICE e AO_VERTICE)
+        e monta a tabela 'tbl_coordenada' com as seguintes correlações:
+            - "DO_VERTICE"           -> Vértice
+            - este de "DO_VERTICE"   -> Este
+            - norte de "DO_VERTICE"  -> Norte
+            - "CONFRONTANTE_DESC"    -> Confrontante
+        """
+        # Impede preenchimento simultâneo se a tabela de azimute já tiver dados
+        if hasattr(self, 'tbl_azimute') and self.tbl_azimute.rowCount() > 0:
+            if exibir_mensagem:
+                QMessageBox.warning(
+                    self,
+                    "Aviso",
+                    "A tabela de azimute já possui dados. Não é possível preencher as duas tabelas simultaneamente."
+                )
+            return False
+
+        # Abre diálogo de seleção se o caminho não foi fornecido
+        if not isinstance(caminho_arquivo, str) or not caminho_arquivo:
+            caminho_arquivo, _ = QFileDialog.getOpenFileName(
+                self,
+                "Importar Limites do SIGEF",
+                "",
+                "Arquivos CSV (*.csv);;Todos os Arquivos (*)"
+            )
+
+        if not caminho_arquivo:
+            return False
+
+        # Leitura com suporte a múltiplas codificações
+        conteudo = None
+        for enc in ['utf-8-sig', 'utf-8', 'latin-1', 'cp1252', 'iso-8859-1']:
+            try:
+                with open(caminho_arquivo, 'r', encoding=enc) as f:
+                    conteudo = f.read()
+                break
+            except (UnicodeDecodeError, Exception):
+                continue
+
+        if conteudo is None:
+            if exibir_mensagem:
+                QMessageBox.critical(
+                    self,
+                    "Erro ao abrir arquivo",
+                    f"Não foi possível ler o arquivo CSV:\n{caminho_arquivo}"
+                )
+            return False
+
+        linhas_raw = [linha for linha in conteudo.splitlines() if linha.strip()]
+        if not linhas_raw:
+            if exibir_mensagem:
+                QMessageBox.warning(self, "Aviso", "O arquivo CSV selecionado está vazio.")
+            return False
+
+        # Detecção de delimitador (; comum no padrão brasileiro do SIGEF ou ,)
+        delimitador = ';' if ';' in linhas_raw[0] else ','
+
+        try:
+            leitor = csv.reader(linhas_raw, delimiter=delimitador)
+            linhas = list(leitor)
+        except Exception as e:
+            if exibir_mensagem:
+                QMessageBox.critical(
+                    self,
+                    "Erro ao processar CSV",
+                    f"Ocorreu um erro ao interpretar o CSV:\n{str(e)}"
+                )
+            return False
+
+        if not linhas:
+            if exibir_mensagem:
+                QMessageBox.warning(self, "Aviso", "O arquivo CSV não possui dados.")
+            return False
+
+        # Mapeia colunas do cabeçalho
+        cabecalho = [col.strip().upper() for col in linhas[0]]
+        mapa_colunas = {}
+        for idx, col in enumerate(cabecalho):
+            if col == 'DO_VERTICE':
+                mapa_colunas['DO_VERTICE'] = idx
+            elif col == 'AO_VERTICE':
+                mapa_colunas['AO_VERTICE'] = idx
+            elif col in ['CONFRONTANTE_DESC', 'CONFRONTANTE']:
+                mapa_colunas['CONFRONTANTE_DESC'] = idx
+            elif col == 'GEOMETRIA_WKT':
+                mapa_colunas['GEOMETRIA_WKT'] = idx
+
+        colunas_obrigatorias = ['DO_VERTICE', 'AO_VERTICE', 'CONFRONTANTE_DESC', 'GEOMETRIA_WKT']
+        faltantes = [c for c in colunas_obrigatorias if c not in mapa_colunas]
+        if faltantes:
+            if exibir_mensagem:
+                QMessageBox.warning(
+                    self,
+                    "Colunas não encontradas",
+                    f"O arquivo CSV não possui as colunas necessárias:\n{', '.join(faltantes)}"
+                )
+            return False
+
+        idx_do = mapa_colunas['DO_VERTICE']
+        idx_ao = mapa_colunas['AO_VERTICE']
+        idx_conf = mapa_colunas['CONFRONTANTE_DESC']
+        idx_wkt = mapa_colunas['GEOMETRIA_WKT']
+
+        dados_coletados = []
+        linhas_com_erro = []
+
+        for num_linha, linha in enumerate(linhas[1:], start=2):
+            if not any(campo.strip() for campo in linha):
+                continue
+
+            max_idx = max(idx_do, idx_ao, idx_conf, idx_wkt)
+            if len(linha) <= max_idx:
+                linhas_com_erro.append(f"Linha {num_linha}: colunas insuficientes.")
+                continue
+
+            do_vertice = linha[idx_do].strip()
+            ao_vertice = linha[idx_ao].strip()
+            confrontante = linha[idx_conf].strip()
+            wkt_texto = linha[idx_wkt].strip()
+
+            este_do, norte_do, este_ao, norte_ao = self.extrair_coordenadas_wkt(wkt_texto)
+
+            if este_do is None or norte_do is None:
+                linhas_com_erro.append(f"Linha {num_linha}: geometria WKT inválida.")
+                continue
+
+            # Mapeia e separa os dados este e norte de cada coluna:
+            # DO_VERTICE  -> este_do, norte_do
+            # AO_VERTICE  -> este_ao, norte_ao
+            dados_coletados.append({
+                'do_vertice': do_vertice,
+                'este_do': este_do,
+                'norte_do': norte_do,
+                'ao_vertice': ao_vertice,
+                'este_ao': este_ao,
+                'norte_ao': norte_ao,
+                'confrontante': confrontante,
+            })
+
+        if not dados_coletados:
+            if exibir_mensagem:
+                msg_erro = "Nenhum dado válido de vértice pôde ser extraído do arquivo CSV."
+                if linhas_com_erro:
+                    msg_erro += "\n\nDetalhes:\n" + "\n".join(linhas_com_erro[:5])
+                QMessageBox.warning(self, "Importação não realizada", msg_erro)
+            return False
+
+        tabela = getattr(self, 'tbl_coordenada', None) or getattr(self, 'tbl_coordenanda', None)
+        if tabela is None:
+            if exibir_mensagem:
+                QMessageBox.critical(self, "Erro", "Tabela de coordenadas não encontrada.")
+            return False
+
+        # Confirma substituição se já houver linhas na tabela
+        if tabela.rowCount() > 0 and exibir_mensagem:
+            deve_perguntar = True
+            if QtWidgets.QApplication.instance() and QtWidgets.QApplication.instance().platformName() == 'offscreen':
+                deve_perguntar = False
+
+            if deve_perguntar:
+                resposta = QMessageBox.question(
+                    self,
+                    "Substituir Dados",
+                    "A tabela de coordenadas já possui registros. Deseja substituí-los pelos dados do arquivo CSV?",
+                    QMessageBox.Yes | QMessageBox.No,
+                    QMessageBox.No
+                )
+                if resposta != QMessageBox.Yes:
+                    return False
+
+        tabela.setRowCount(0)
+
+        for item in dados_coletados:
+            nova_linha = tabela.rowCount()
+            tabela.insertRow(nova_linha)
+            # Correlações especificadas:
+            # "DO_VERTICE"          -> Vértice (coluna 0)
+            # o este de DO_VERTICE  -> Este (coluna 1)
+            # o norte de DO_VERTICE -> Norte (coluna 2)
+            # "CONFRONTANTE_DESC"   -> Confrontante (coluna 3)
+            tabela.setItem(nova_linha, 0, QtWidgets.QTableWidgetItem(str(item['do_vertice'])))
+            tabela.setItem(nova_linha, 1, QtWidgets.QTableWidgetItem(str(item['este_do'])))
+            tabela.setItem(nova_linha, 2, QtWidgets.QTableWidgetItem(str(item['norte_do'])))
+            tabela.setItem(nova_linha, 3, QtWidgets.QTableWidgetItem(str(item['confrontante'])))
+
+        if hasattr(self, 'chkbox_sigef'):
+            self.chkbox_sigef.setChecked(True)
+
+        self.atualizar_estado_btn_remove_ln_cor()
+        self.atualizar_estado_abas_tabelas()
+
+        if hasattr(self, 'tabWidget') and hasattr(self, 'coordenada'):
+            self.tabWidget.setCurrentWidget(self.coordenada)
+
+        if exibir_mensagem:
+            msg_sucesso = f"{len(dados_coletados)} vértices importados com sucesso do SIGEF!"
+            if linhas_com_erro:
+                msg_sucesso += f"\n\nObservação ({len(linhas_com_erro)} linha(s) ignorada(s)):\n" + "\n".join(linhas_com_erro[:5])
+                QMessageBox.warning(self, "Importação Concluída com Alertas", msg_sucesso)
+            else:
+                QMessageBox.information(self, "Sucesso", msg_sucesso)
+
+        return True
 
     def criar_camadas_coordenadas(self, adicionar_projeto=True):
         """Cria pontos, linhas e polígono com a tabela preenchida."""

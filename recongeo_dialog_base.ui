@@ -1165,6 +1165,27 @@
        <string>+</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="btn_sigef_import">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>270</y>
+        <width>171</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Importa os dados da camada &lt;span style=&quot; font-weight:600; font-style:italic;&quot;&gt;Limites&lt;/span&gt; do SIGEF no formato &lt;span style=&quot; font-weight:600;&quot;&gt;CSV&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(46, 194, 126);
+font: 75 12pt &quot;Sans&quot;;</string>
+      </property>
+      <property name="text">
+       <string>Importar Limites 
+do SIGEF</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
