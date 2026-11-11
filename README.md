@@ -71,4 +71,4 @@ Durante o desenvolvimento, instale o complemento **Plugin Reloader** diretamente
 
 ## Documentação ReconGeo
 
-(ReconGeo Doc)[https://isr4elely.github.io/recongeo/]
+[ReconGeo Doc](https://isr4elely.github.io/recongeo/)
