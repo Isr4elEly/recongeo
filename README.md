@@ -68,3 +68,7 @@ ln -s "/home/isr/Documentos/arquivos/recongeo" ~/.local/share/QGIS/QGIS3/profile
 
 Durante o desenvolvimento, instale o complemento **Plugin Reloader** diretamente pelo Gerenciador de Complementos do QGIS:
 - Com ele, ao alterar o código Python ou salvar o `.ui` no Qt Designer, basta pressionar a tecla de atalho configurada (ou clicar no ícone do Plugin Reloader) para recarregar o plugin instantaneamente, sem precisar fechar e reabrir o QGIS!
+
+## Documentação ReconGeo
+
+(ReconGeo Doc)[https://isr4elely.github.io/recongeo/]
