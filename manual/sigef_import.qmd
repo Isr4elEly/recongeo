@@ -2,6 +2,52 @@
 
 ## Acessando o SIGEF
 
-Acesso o Sistema de Gestão Fundiária do INCRA através do endereço: (https://sigef.incra.gov.br/)[https://sigef.incra.gov.br/]
+Acesso o Sistema de Gestão Fundiária do INCRA através do endereço: [https://sigef.incra.gov.br/](https://sigef.incra.gov.br/)
 
-!()[manual/imagens/sigef.jpeg]
+::: {layout="[[30,70]]"}
+
+::: {.callout-note}
+
+1. Engre na página do SIGEF;
+2. Use o seu gov.br para acessar os dados;
+
+:::
+
+![](imagens/sigef.jpeg)
+
+Na página do SIGEF, clique em Consultar -> Parcelas.
+
+![](imagens/2026-11-11_16-41.jpeg)
+
+
+Use uma das opções de filtro para identificar se existe um pilígono certificado referente ao imóvel em análise.
+
+![](imagens/2026-11-11_16-44.jpeg)
+
+Na parte de resultados, no lado esquerdo da linha, clique no botão para baixar arquivos, escolha a opção **CSV** -> **Limites**.
+
+![](imagens/2026-11-11_16-49.jpeg)
+
+Abra o plugin ReconGeo e clique sobre o botão **Importar Limites do SIGEF**
+
+![](imagens/2026-11-11_16-51.jpeg)
+
+Selecione o arquiv csv baiaxdo da página do SIGEF.
+
+![](imagens/2026-11-11_16-52.jpeg)
+
+O ReconGeo irá montar a planilha conforme os dados do SIGEF. Lembre-se que os dados baixados encontra-se no sistema de referência SIRGAS2000 (EPSG: 4674).
+
+![](imagens/2026-11-11_16-52_1.jpeg)
+
+::: {.callout-note}
+1. Pressione **OK** após a importação.
+:::
+
+
+
+:::
+
+::: {.callout-important}
+Utilize as opções **Vetores Temporários** ou **Arquivos Finais** para gerar os vetores.
+:::

@@ -7,7 +7,8 @@ O plugin visa coletar informações sobre o processo, titulado, título e vetore
 
 Acesso ao plunig e projeto modelo:
 
-- [Recongeo](https://drive.google.com/file/d/1MiWyZGr0jn7lb3-R6ghV5oYr2BWx0_4o/view?usp=drive_link){target="_blank"}
+- [Recongeo](https://drive.google.com/drive/folders/1O1PRmHEdj_VPXibmPlqTQOpFA6ni38Ni?usp=sharing){target="_blank"}
 
 - [Projeto padrão QGIS](https://drive.google.com/file/d/1JVTdbGzdm-xdKI0Ec-dUr0weHjVQm0fb/view?usp=sharing){target="_blank"}
 
+- [ReconGeo Documentação](https://isr4elely.github.io/recongeo/){target="_blank"}

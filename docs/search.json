@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "ReconGeo - Reconstituição de lotes titulados",
     "section": "",
-    "text": "Introdução\nO plgin ReconGeo foi desenvolvido na plataforma do QGIS 3.x para auxiliar nos trabalhos de reconstituição de vetores com base em processos administrativos antigos de regularização fundiária do INCRA, os quais não possuem representação digital das poligonais documentadas.\nO plugin visa coletar informações sobre o processo, titulado, título e vetores, reconstruído uma base mínima de informações para uso interno da autarquia.\nAcesso ao plunig e projeto modelo:\n\nRecongeo\nProjeto padrão QGIS",
+    "text": "Introdução\nO plgin ReconGeo foi desenvolvido na plataforma do QGIS 3.x para auxiliar nos trabalhos de reconstituição de vetores com base em processos administrativos antigos de regularização fundiária do INCRA, os quais não possuem representação digital das poligonais documentadas.\nO plugin visa coletar informações sobre o processo, titulado, título e vetores, reconstruído uma base mínima de informações para uso interno da autarquia.\nAcesso ao plunig e projeto modelo:\n\nRecongeo\nProjeto padrão QGIS\nReconGeo Documentação",
     "crumbs": [
       "Introdução"
     ]
@@ -214,7 +214,17 @@
     "href": "sigef_import.html",
     "title": "9  Importação de dados do SIGEF",
     "section": "",
-    "text": "9.1 Acessando o SIGEF\nAcesso o Sistema de Gestão Fundiária do INCRA através do endereço: (https://sigef.incra.gov.br/)[https://sigef.incra.gov.br/]\n!()[manual/imagens/sigef.jpeg]",
+    "text": "9.1 Acessando o SIGEF\nAcesso o Sistema de Gestão Fundiária do INCRA através do endereço: https://sigef.incra.gov.br/",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Importação de dados do SIGEF</span>"
+    ]
+  },
+  {
+    "objectID": "sigef_import.html#acessando-o-sigef",
+    "href": "sigef_import.html#acessando-o-sigef",
+    "title": "9  Importação de dados do SIGEF",
+    "section": "",
+    "text": "Note\n\n\n\n\nEngre na página do SIGEF;\nUse o seu gov.br para acessar os dados;\n\n\n\n\n\n\n\n\n\n\nNa página do SIGEF, clique em Consultar -&gt; Parcelas.\n\n\n\n\n\n\n\nUse uma das opções de filtro para identificar se existe um pilígono certificado referente ao imóvel em análise.\n\n\n\n\n\n\n\nNa parte de resultados, no lado esquerdo da linha, clique no botão para baixar arquivos, escolha a opção CSV -&gt; Limites.\n\n\n\n\n\n\n\nAbra o plugin ReconGeo e clique sobre o botão Importar Limites do SIGEF\n\n\n\n\n\n\n\nSelecione o arquiv csv baiaxdo da página do SIGEF.\n\n\n\n\n\n\n\nO ReconGeo irá montar a planilha conforme os dados do SIGEF. Lembre-se que os dados baixados encontra-se no sistema de referência SIRGAS2000 (EPSG: 4674).\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nPressione OK após a importação.\n\n\n\n\n\n\n\n\n\n\n\n\nImportant\n\n\n\nUtilize as opções Vetores Temporários ou Arquivos Finais para gerar os vetores.",
     "crumbs": [
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Importação de dados do SIGEF</span>"
     ]
