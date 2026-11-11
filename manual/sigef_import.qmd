@@ -1,0 +1,7 @@
+# Importação de dados do SIGEF
+
+## Acessando o SIGEF
+
+Acesso o Sistema de Gestão Fundiária do INCRA através do endereço: (https://sigef.incra.gov.br/)[https://sigef.incra.gov.br/]
+
+!()[manual/imagens/sigef.jpeg]

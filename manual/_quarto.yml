@@ -10,7 +10,6 @@ book:
   title: "ReconGeo - Reconstituição de lotes titulados"
   repo-url: https://github.com/Isr4elEly/recongeo/tree/master
   author: "Israel Ely de A. Oliveira"
-  language: pt
   date: "2026-09-25"
   date-format: full
   cover-image: imagens/a7904fab-bea6-479f-a5d4-8832a9055c73.jpeg
@@ -24,6 +23,7 @@ book:
     - coord.qmd
     - del-linha.qmd
     - recalc.qmd
+    - sigef_import.qmd
 
 bibliography: references.bib
 
@@ -47,7 +47,6 @@ format:
   pdf:
     documentclass: book
     toc: true
-    lang: "pt-br"
     geometry: 
       - top=30mm
       - left=25mm

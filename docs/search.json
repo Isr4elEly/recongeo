@@ -208,5 +208,15 @@
     "crumbs": [
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Recálculando a tabela de azimute e distência.</span>"
     ]
+  },
+  {
+    "objectID": "sigef_import.html",
+    "href": "sigef_import.html",
+    "title": "9  Importação de dados do SIGEF",
+    "section": "",
+    "text": "9.1 Acessando o SIGEF\nAcesso o Sistema de Gestão Fundiária do INCRA através do endereço: (https://sigef.incra.gov.br/)[https://sigef.incra.gov.br/]\n!()[manual/imagens/sigef.jpeg]",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Importação de dados do SIGEF</span>"
+    ]
   }
 ]
